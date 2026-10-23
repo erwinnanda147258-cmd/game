@@ -1,0 +1,702 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Shadow Rift: Last Eclipse</title>
+  <style>
+@font-face{font-family:LocalSerif;src:local("Georgia")}*{box-sizing:border-box}body{margin:0;background:#0c0c12;color:#e4e0ee;font-family:Arial,sans-serif}button,a{-webkit-tap-highlight-color:transparent}header{height:88px;border-bottom:1px solid #28232f;display:flex;align-items:center;justify-content:space-between;padding:0 5vw}.brand{display:flex;align-items:center;gap:16px;text-decoration:none;color:#d6b4ff;font-family:Georgia,serif;font-size:28px;letter-spacing:-3px}.brand span{font-family:Arial,sans-serif;font-size:12px;letter-spacing:3px;color:#eee}.edition{font-size:10px;letter-spacing:3px;color:#948a9e}.edition b{color:#695474;margin:0 12px}button{cursor:pointer;border:1px solid #635074;background:#21182f;color:#eee;padding:14px 22px;letter-spacing:2px;font-size:11px;transition:background .15s}button:hover{background:#48325e}button:focus-visible{outline:2px solid #e3c4ff;outline-offset:4px}header button{font-size:9px;background:transparent;padding:10px 14px}main{max-width:1440px;margin:auto;padding:28px 5vw}.chapter{display:flex;justify-content:space-between;margin-bottom:16px;font-size:10px;letter-spacing:2px;color:#b0a3be}.status{font-size:9px;color:#8a9c91}#viewport{position:relative;overflow:hidden;border:1px solid #42304f;background:#16101f;aspect-ratio:16/9;box-shadow:0 24px 80px #0006}canvas{display:block;width:100%;height:100%;outline:none}#hud{position:absolute;top:26px;left:28px;right:28px;display:flex;justify-content:space-between;gap:20px;pointer-events:none}#hud[hidden]{display:none}.health{width:25%;font-size:10px;letter-spacing:1px}.health>div:first-child{display:flex;justify-content:space-between;margin-bottom:9px}.health span{color:#aa9cb7}.track{height:7px;background:#07070cc9;outline:1px solid #66527455;padding:1px}.track i{display:block;height:5px;background:linear-gradient(90deg,#7544ba,#d1abff);width:100%;transition:width .08s}.enemy-health .track i{background:linear-gradient(90deg,#963e57,#ff8692)}.health small{display:block;font-size:8px;margin-top:8px;color:#a797b5}.objective{text-align:center}.objective span{display:block;letter-spacing:3px;font-size:9px;color:#c5acd8}.objective strong{display:block;font-size:11px;font-weight:normal;margin-top:9px;color:#ded3e5}#overlay{position:absolute;inset:0;display:flex;align-items:center;padding:7%;background:linear-gradient(90deg,#0b0815ef,#100b1c99 48%,transparent)}#overlay[hidden]{display:none}.menu{max-width:560px}.eyebrow{font-size:10px;letter-spacing:4px;color:#bda0d9;margin:0 0 20px}.menu h1{font-family:LocalSerif,Georgia,serif;font-size:clamp(30px,5.6vw,76px);font-weight:normal;line-height:.95;letter-spacing:-2px;margin:0;color:#f0e8f7;text-shadow:0 5px 30px #000}.menu h2{font-size:clamp(12px,1.5vw,20px);font-weight:normal;letter-spacing:7px;color:#c099eb;margin:16px 0 26px}.menu p{font-size:12px;line-height:1.8;color:#b6a9c4;max-width:355px}.menu .buttons{display:flex;gap:10px;margin-top:28px;flex-wrap:wrap}.primary{background:#ab7cdb;color:#110c18;border-color:#d7b1fa;min-width:190px;font-weight:bold}.primary:hover{background:#d3acf4}.menu .hint{font-size:9px;letter-spacing:2px;margin-top:18px;color:#82718e}.arena-caption{position:absolute;bottom:20px;left:28px;right:28px;display:flex;justify-content:space-between;font-size:8px;letter-spacing:2px;color:#b9a2cc88;pointer-events:none}.arena-caption b{padding:0 8px}footer{display:flex;justify-content:space-between;align-items:center;margin-top:18px;font-size:8px;color:#82778d;letter-spacing:1px}footer>div{display:flex;align-items:center;gap:5px}footer div span{margin:0 14px 0 4px}kbd{font-family:Arial,sans-serif;font-size:9px;border:1px solid #3e3449;border-bottom-width:2px;padding:6px;min-width:25px;text-align:center;color:#d0c4de}.note{color:#766b80;font-size:11px;line-height:1.8;margin-top:24px}@media(max-width:700px){header{height:65px}.edition,footer>span,.status{display:none}main{padding:20px 3vw}.brand span{font-size:10px}#hud{top:12px;left:12px;right:12px}.health{font-size:7px}.objective strong{font-size:8px}.objective span{font-size:7px}.menu h2{margin:10px 0}.menu p{font-size:10px;max-width:280px}.menu .buttons{margin-top:12px}button{padding:10px;font-size:9px}.menu .hint,.arena-caption{display:none}footer div span{margin-right:6px;font-size:7px}kbd{padding:4px;min-width:20px}.eyebrow{margin-bottom:12px}}
+
+.energy{margin-top:7px;height:5px}.energy i{height:3px;background:linear-gradient(90deg,#326a8c,#77dcf0)}#energy-value{float:right}#combo-state{color:#c3a0e5;min-height:10px}#ability-hud{position:absolute;bottom:44px;left:28px;right:28px;display:flex;gap:8px;pointer-events:none}#ability-hud[hidden]{display:none}.ability{display:flex;align-items:center;gap:10px;padding:10px 12px;background:#120e1de8;border:1px solid #544064;min-width:145px}.ability strong{display:block;font-size:8px;letter-spacing:1px;color:#d8c6eb}.ability small{display:block;font-size:8px;margin-top:6px;color:#84d2e3}.ability.unavailable{opacity:.5}.ability.unavailable small{color:#ba99ae}.ability kbd{color:#d6b2ff;border-color:#6b4b81}#action-notice{position:absolute;left:0;bottom:64px;font-size:11px;color:#e8ceff;letter-spacing:2px;text-shadow:0 2px 6px #000}footer{gap:10px}footer>div{flex-wrap:wrap;row-gap:8px}footer>span{white-space:nowrap}footer div span{margin-right:8px}@media(max-width:900px){footer>span{display:none}.ability{min-width:0;padding:7px;gap:5px}.ability strong{font-size:7px}.ability small{font-size:7px}#ability-hud{left:12px;right:12px;bottom:20px;gap:5px}#action-notice{bottom:54px;font-size:8px}.arena-caption{display:none}.health small{font-size:7px}}
+
+#overlay{overflow:auto}.menu{padding:12px 0}.menu.wide{max-width:100%;width:100%}.menu.wide h1{font-size:clamp(26px,3.4vw,48px)}.menu.wide h2{font-size:13px;margin:12px 0 20px}.stage-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.stage-grid button,.upgrade-grid button{text-align:left;letter-spacing:.5px;padding:12px}.stage-grid strong,.upgrade-grid strong{display:block;font-size:11px;margin:8px 0}.stage-grid small{font-size:8px;color:#b29bbf}.stage-grid span,.upgrade-grid span{font-size:9px;color:#9dd7dd}.upgrade-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.settings{display:grid;gap:12px;font-size:13px;color:#cfbddf}.settings label{display:flex;align-items:center;gap:15px}.settings select{background:#281d36;color:#eee;padding:6px}.settings input{accent-color:#bd87e6}button:disabled{opacity:.35;cursor:not-allowed}#save-status,#import-message{color:#ffc18c;font-size:11px}.menu .buttons{gap:8px;margin-top:16px}.menu p{margin:8px 0}.menu .buttons button{padding:12px 16px}.menu.wide p{max-width:650px}@media(max-height:800px){.menu h1{font-size:44px}.menu h2{margin:10px 0;font-size:14px}.menu .eyebrow{margin-bottom:10px}#overlay{padding:4% 6%}.stage-grid button{padding:8px}}@media(max-width:700px){.stage-grid{grid-template-columns:1fr 1fr}.stage-grid small{display:none}.menu h1{font-size:28px}.menu h2{font-size:12px}.menu .buttons button{font-size:8px;padding:8px}.menu .buttons .primary{min-width:0}}
+
+</style>
+</head>
+<body>
+  <header><a class="brand" href="./Shadow-Rift-Last-Eclipse.html">SR<span>SHADOW RIFT</span></a><span class="edition">LAST ECLIPSE <b> / </b> CAMPAIGN 1.1</span><button id="sound" aria-pressed="false">SOUND OFF</button></header>
+  <main>
+    <div class="chapter"><span>01 / THE FALLEN KINGDOM</span><span class="status">● OFFLINE · LOCAL BUILD</span></div>
+    <section id="viewport" aria-label="Arena permainan">
+      <canvas id="game" width="1280" height="720" tabindex="0" aria-label="Shadow Rift. A dan D bergerak, W lompat, J serang ringan, K serang berat, L dash, Space block, U dan I skill, O ultimate, Escape pause."></canvas>
+      <div id="hud" hidden>
+        <div class="health player-health"><div><strong>THE WANDERER</strong><span id="player-hp"></span></div><div class="track"><i id="player-bar"></i></div><small>ENERGY <span id="energy-value">100 / 100</span></small><div class="track energy"><i id="energy-bar"></i></div><small id="combo-state">COMBO · J → J → K</small></div>
+        <div class="objective"><span>ASHEN VILLAGE</span><strong id="objective">Kalahkan penjaga rift</strong></div>
+        <div class="health enemy-health"><div><strong>RIFT SENTINEL</strong><span id="enemy-hp"></span></div><div class="track"><i id="enemy-bar"></i></div><small id="enemy-state">GUARDIAN / 01</small></div>
+      </div>
+      <div id="ability-hud" hidden>
+        <div class="ability" id="ability-dash"><kbd>L</kbd><div><strong>SHADOW STEP</strong><small id="dash-status">20 EN · READY</small></div></div>
+        <div class="ability" id="ability-rift"><kbd>U</kbd><div><strong>RIFT LANCE</strong><small id="rift-status">25 EN · READY</small></div></div>
+        <div class="ability" id="ability-nova"><kbd>I</kbd><div><strong>UMBRAL NOVA</strong><small id="nova-status">40 EN · READY</small></div></div>
+        <div class="ability" id="ability-eclipse"><kbd>O</kbd><div><strong>LAST ECLIPSE</strong><small id="eclipse-status">85 EN · READY</small></div></div>
+        <span id="action-notice" role="status"></span>
+      </div>
+      <div id="overlay">
+        <div class="menu" id="menu-content"></div>
+      </div>
+      <div class="arena-caption"><span>ASHEN VILLAGE <b>—</b> THE RIFT AWAKENS</span><span>BUILD 1.1</span></div>
+    </section>
+    <footer><div><kbd>A</kbd><kbd>D</kbd><span>MOVE</span><kbd>W</kbd><span>JUMP</span><kbd>J</kbd><span>LIGHT</span><kbd>K</kbd><span>HEAVY</span><kbd>L</kbd><span>DASH</span><kbd>SPACE</kbd><span>BLOCK</span><kbd>U / I / O</kbd><span>SKILLS</span><kbd>ESC</kbd><span>PAUSE</span></div><span>ONE BLADE. ONE LAST DAWN.</span></footer>
+    <p class="note">9 stages · 3 regions · 3 bosses. J → J → K combo · L dash · Space block · U Rift Lance · I unlock setelah stage 2 · O unlock setelah stage 6. Progres disimpan setelah kemenangan dan upgrade.</p>
+  </main>
+  <script>
+// Source: js/input.js
+// Classic script modules keep the game playable directly from file://, offline.
+globalThis.SR = globalThis.SR || {};
+SR.Input = class {
+  constructor(target = window) {
+    this.held = new Set(); this.pressed = new Set();
+    const keys = new Set(['KeyA','KeyD','KeyW','KeyJ','KeyK','KeyL','KeyU','KeyI','KeyO','Escape','Space']);
+    target.addEventListener('keydown', e => {
+      if (!keys.has(e.code) || (e.code !== 'Escape' && /INPUT|TEXTAREA|SELECT/.test(e.target?.tagName))) return;
+      if(e.code === 'Space' && e.target?.tagName === 'BUTTON') return;
+      e.preventDefault();
+      if (!e.repeat && !this.held.has(e.code)) this.pressed.add(e.code);
+      this.held.add(e.code);
+    });
+    target.addEventListener('keyup', e => this.held.delete(e.code));
+    target.addEventListener('blur', () => this.clear());
+  }
+  down(key) { return this.held.has(key); }
+  take(key) { const found=this.pressed.has(key); this.pressed.delete(key); return found; }
+  endFrame() { this.pressed.clear(); }
+  clear() { this.held.clear(); this.pressed.clear(); }
+};
+
+</script><script>
+// Source: js/player.js
+SR.makePlayer = () => ({
+  team: 'player', x: 320, y: 570, w: 42, h: 96, vx: 0, vy: 0,
+  face: 1, hp: 120, maxHp: 120, speed: 300, grounded: true,
+  attack: null, cooldown: 0, stun: 0, invuln: 0, flash: 0, walk: 0,
+  energy: 100, maxEnergy: 100, regenDelay: 0,
+  dash: 0, dashCooldown: 0, blocking: false, guardBroken: 0,
+  skillCooldowns: {rift: 0, nova: 0, eclipse: 0},
+  combo: '', comboWindow: 0, comboLabel: '', comboFlash: 0,
+  buffer: null, notice: '', noticeTime: 0
+});
+
+SR.notifyPlayer = (p, message) => { p.notice = message; p.noticeTime = 1.2; };
+SR.spendEnergy = (p, amount) => {
+  if (p.energy < amount) { SR.notifyPlayer(p, 'ENERGI KURANG'); return false; }
+  p.energy -= amount;
+  p.regenDelay = .65;
+  return true;
+};
+SR.breakCombo = p => { p.combo = ''; p.comboWindow = 0; p.buffer = null; };
+
+SR.playerAttack = (p, key) => {
+  const finisher = key === 'K' && p.combo === 'JJ' && p.comboWindow > 0;
+  if (!SR.beginAttack(p, finisher ? 'finisher' : key === 'J' ? 'light' : 'heavy')) return false;
+  if (finisher) {
+    p.comboLabel = 'J → J → K · RIFT BREAKER'; p.comboFlash = 1.5;
+    SR.breakCombo(p);
+  } else if (key === 'J') {
+    p.combo = p.combo === 'J' && p.comboWindow > 0 ? 'JJ' : 'J';
+    p.comboWindow = 1.25;
+  } else SR.breakCombo(p);
+  return true;
+};
+
+SR.useSkill = (p, type) => {
+  const skill = SR.skills[type];
+  if (!skill || p.hp <= 0 || p.stun > 0 || p.attack || p.dash > 0 || p.blocking || p.cooldown > 0) return false;
+  if(p.unlockedSkills&&!p.unlockedSkills[type]){SR.notifyPlayer(p,'SKILL TERKUNCI');return false;}
+  if (p.skillCooldowns[type] > 0) { SR.notifyPlayer(p, 'SKILL BELUM SIAP'); return false; }
+  if (!SR.spendEnergy(p, skill.cost)) return false;
+  SR.beginAttack(p, type);
+  p.skillCooldowns[type] = skill.cooldown*(p.cooldownScale||1);
+  SR.breakCombo(p);
+  if (type === 'eclipse') p.invuln = .65;
+  SR.notifyPlayer(p, skill.name.toUpperCase());
+  return true;
+};
+
+SR.updatePlayer = (p, input, dt) => {
+  // Timers belong to simulation time; pause freezes everything, including regen.
+  for (const key of ['dashCooldown', 'guardBroken', 'regenDelay', 'comboWindow', 'comboFlash', 'noticeTime']) {
+    p[key] = Math.max(0, p[key] - dt);
+  }
+  for (const key of Object.keys(p.skillCooldowns)) p.skillCooldowns[key] = Math.max(0, p.skillCooldowns[key] - dt);
+  if (p.comboWindow === 0) p.combo = '';
+  if (p.buffer) { p.buffer.life -= dt; if (p.buffer.life <= 0) p.buffer = null; }
+  p.blocking = false;
+  if (p.hp <= 0 || p.stun > 0) { p.buffer = null; return; }
+  const direction = Number(input.down('KeyD')) - Number(input.down('KeyA'));
+  if (p.dash > 0) {
+    p.dash = Math.max(0, p.dash - dt);
+    p.vx = p.dash > 0 ? p.face * 850 : 0;
+    return;
+  }
+  if (direction && !p.attack) p.face = direction;
+  if (input.take('KeyL') && !p.attack && p.dashCooldown === 0 && SR.spendEnergy(p, 20)) {
+    p.dash = .18; p.dashCooldown = .8; p.invuln = Math.max(p.invuln, .16);
+    p.vx = p.face * 850; SR.breakCombo(p); return;
+  }
+  p.blocking = input.down('Space') && p.grounded && !p.attack && p.guardBroken === 0 && p.energy > 0;
+  if (p.blocking) {
+    p.energy = Math.max(0, p.energy - 8 * dt); p.regenDelay = .65; p.buffer = null;
+    if (p.energy === 0) { p.blocking = false; p.guardBroken = .8; SR.notifyPlayer(p, 'GUARD EXHAUSTED'); }
+  } else if (!p.attack && p.regenDelay === 0) p.energy = Math.min(p.maxEnergy, p.energy + 13 * dt);
+  p.vx = direction * p.speed * (p.attack ? .35 : p.blocking ? .28 : 1);
+  if (p.blocking) return;
+  if (input.take('KeyW') && p.grounded) { p.vy = -690; p.grounded = false; }
+  for (const [key, type] of [['KeyO', 'eclipse'], ['KeyI', 'nova'], ['KeyU', 'rift']]) {
+    if (input.take(key) && SR.useSkill(p, type)) return;
+  }
+  const key = input.take('KeyK') ? 'K' : input.take('KeyJ') ? 'J' : null;
+  if (key) {
+    if (!SR.playerAttack(p, key)) {
+      // A single fresh input can queue during the final 180 ms of recovery.
+      const remaining = p.attack ? p.attack.windup + p.attack.active + p.attack.recovery - p.attack.time : p.cooldown;
+      if (remaining <= .18) p.buffer = {key, life: .3};
+    }
+  } else if (p.buffer && !p.attack && p.cooldown === 0) {
+    const buffered = p.buffer.key; p.buffer = null; SR.playerAttack(p, buffered);
+  }
+};
+
+</script><script>
+// Source: js/enemies.js
+SR.makeEnemy = () => ({
+  team: 'enemy', x: 1050, y: 570, w: 50, h: 108, vx: 0, vy: 0, face: -1,
+  hp: 180, maxHp: 180, speed: 145, grounded: true, attack: null,
+  cooldown: .7, stun: 0, invuln: 0, flash: 0, walk: 0, attacks: 0, intent: 'CHASE'
+});
+SR.updateEnemy = (e, p, dt, game) => {
+  if (e.hp <= 0 || e.stun > 0) return;
+  e.vx = 0;
+  if (e.attack || p.hp <= 0) return;
+  if(game&&(e.spawnGrace>0||e.x<game.camera+25||e.x>game.camera+1255)){e.vx=(p.x<e.x?-1:1)*e.speed;return;}
+  const distance = Math.abs(p.x - e.x);
+  e.face = p.x < e.x ? -1 : 1;
+  if(e.kind==='caster'&&distance>150&&distance<260&&e.cooldown<=0){e.vx=0;SR.beginAttack(e,'hex');e.intent='HEX';return;}
+  if (e.cooldown > 0 && distance < 155) {
+    e.vx = -e.face * e.speed * .65; e.intent = 'REPOSITION';
+  } else if (distance > 110) {
+    e.vx = e.face * e.speed; e.intent = 'CHASE';
+  } else if (e.cooldown <= 0 && Math.abs(p.y - e.y) < 135) {
+    const type = e.attacks % 3 === 2 ? 'enemyHeavy' : 'enemy';
+    if (SR.beginAttack(e, type)) { e.attacks++; e.intent = type === 'enemyHeavy' ? 'GUARD BREAK' : 'STRIKE'; }
+  } else e.intent = 'WAIT';
+};
+
+</script><script>
+// Source: js/combat.js
+SR.ARENA = {width: 2200, ground: 570, gravity: 1850};
+SR.skills = {
+  rift: {name: 'Rift Lance', cost: 25, cooldown: 4},
+  nova: {name: 'Umbral Nova', cost: 40, cooldown: 7},
+  eclipse: {name: 'Last Eclipse', cost: 85, cooldown: 16}
+};
+SR.moves = {
+  light: {windup: .10, active: .13, recovery: .20, damage: 15, range: 100, knock: 140, stun: .22},
+  heavy: {windup: .34, active: .17, recovery: .38, damage: 32, range: 135, knock: 370, stun: .45},
+  finisher: {windup: .23, active: .20, recovery: .40, damage: 52, range: 170, knock: 480, stun: .6},
+  rift: {windup: .20, active: .18, recovery: .28, damage: 26, range: 300, knock: 190, stun: .3},
+  nova: {windup: .27, active: .22, recovery: .32, damage: 38, range: 185, knock: 430, stun: .5, radial: true},
+  eclipse: {windup: .45, active: .25, recovery: .55, damage: 75, range: 360, knock: 540, stun: .8, radial: true},
+  enemy: {windup: .65, active: .16, recovery: .65, damage: 20, range: 133, knock: 310, stun: .28},
+  enemyHeavy: {windup: 1.0, active: .20, recovery: .85, damage: 30, range: 155, knock: 390, stun: .5, guardBreak: true}
+};
+Object.assign(SR.moves,{hex:{windup:.85,active:.18,recovery:.7,damage:16,range:280,knock:160,stun:.2},bossSweep:{windup:.9,active:.22,recovery:.8,damage:24,range:210,knock:340,stun:.35,radial:true},bossHex:{windup:1,active:.2,recovery:.6,damage:20,range:200,knock:200,stun:.3}});
+SR.beginAttack = (actor, type) => {
+  if (!SR.moves[type] || actor.hp <= 0 || actor.attack || actor.cooldown > 0 || actor.stun > 0 || actor.dash > 0 || actor.blocking) return false;
+  actor.attack = {...SR.moves[type], type, time: 0, hit: false, targets: new Set()};
+  actor.attack.damage=Math.round(actor.attack.damage*(actor.damageScale||1));
+  actor.vx = 0;
+  return true;
+};
+SR.tickActor = (a, dt) => {
+  for (const key of ['cooldown', 'stun', 'invuln', 'flash']) a[key] = Math.max(0, a[key] - dt);
+  if (a.hp <= 0) { a.vx *= Math.exp(-10 * dt); a.attack = null; a.blocking = false; }
+  if (a.stun > 0) a.vx *= Math.exp(-5 * dt);
+  a.vy += SR.ARENA.gravity * dt; a.x += a.vx * dt; a.y += a.vy * dt;
+  a.x = Math.max(a.w / 2, Math.min(SR.ARENA.width - a.w / 2, a.x));
+  a.grounded = a.y >= SR.ARENA.ground;
+  if (a.grounded) { a.y = SR.ARENA.ground; a.vy = 0; }
+  a.walk += Math.abs(a.vx) * dt * .035;
+};
+SR.attackBox = a => ({
+  left: a.attack.radial || a.face < 0 ? a.x - a.attack.range : a.x,
+  right: a.attack.radial || a.face > 0 ? a.x + a.attack.range : a.x,
+  top: a.y - a.h - (a.attack.radial ? 45 : 12), bottom: a.y - 18
+});
+SR.resolveAttack = (a, targets, dt, onHit = () => {}) => {
+  const victims=Array.isArray(targets)?targets:[targets];
+  const attack = a.attack;
+  if (!attack) return;
+  attack.time += dt;
+  for(const b of victims){
+  if (attack.time >= attack.windup && attack.time < attack.windup + attack.active && !attack.targets.has(b) && b.hp > 0 && b.invuln <= 0) {
+    const box = SR.attackBox(a);
+    if (box.right > b.x - b.w / 2 && box.left < b.x + b.w / 2 && box.bottom > b.y - b.h && box.top < b.y) {
+      attack.hit = true;attack.targets.add(b);
+      let damage = attack.damage, knock = attack.knock, stun = attack.stun, event = 'hit';
+      const facingAttacker = (a.x - b.x) * b.face >= 0;
+      if (b.blocking && b.grounded && facingAttacker) {
+        b.regenDelay = .65;
+        if (!attack.guardBreak && b.energy >= 14) {
+          b.energy -= 14; damage = Math.ceil(damage * .2); knock *= .2; stun = .06; event = 'block';
+        } else {
+          b.energy = Math.max(0, b.energy - 25); b.guardBroken = .9; b.blocking = false;
+          stun = .7; event = 'break'; SR.notifyPlayer(b, 'GUARD BROKEN');
+        }
+      }
+      b.hp = Math.max(0, b.hp - damage); b.stun = stun; b.invuln = .24; b.flash = .12;
+      const direction = attack.radial ? (b.x >= a.x ? 1 : -1) : a.face;
+      b.vx = direction * knock*(b.boss?.18:1); b.vy = event === 'block'||b.boss ? 0 : -110; if(!b.boss)b.attack = null;else b.stun=0;
+      if (b.team === 'player') { SR.breakCombo(b); b.dash = 0; }
+      onHit(b, damage, direction, event);
+    }
+  }
+  }
+  if (attack.time >= attack.windup + attack.active + attack.recovery) {
+    a.attack = null; a.cooldown = a.team === 'enemy' ? .6 : .08;
+  }
+};
+SR.separate = (a, b) => {
+  if (a.hp <= 0 || b.hp <= 0 || a.dash > 0 || b.dash > 0 || a.y - a.h >= b.y || b.y - b.h >= a.y) return;
+  const [left,right]=a.x<=b.x?[a,b]:[b,a];
+  const distance=(left.w+right.w)/2;
+  const overlap=distance-(right.x-left.x);
+  if(overlap<=0)return;
+  // Share the correction, then transfer any wall-constrained remainder to the free actor.
+  left.x=Math.max(left.w/2,left.x-overlap/2);
+  right.x=Math.min(SR.ARENA.width-right.w/2,right.x+overlap/2);
+  const remaining=distance-(right.x-left.x);
+  if(remaining>0){
+    const moveLeft=Math.min(remaining,left.x-left.w/2);
+    left.x-=moveLeft;right.x+=remaining-moveLeft;
+  }
+};
+
+</script><script>
+// Source: js/audio.js
+SR.Audio = class {
+  constructor(){
+    this.enabled=false;this.context=null;this.master=null;this.musicBus=null;
+    this._settings={volume:.45,music:true};this.suspended=true;this.beat=0;this.clock=0;
+  }
+  get settings(){return this._settings;}
+  set settings(value){this._settings=value;this.sync();}
+  setSuspended(value){this.suspended=value;this.sync();}
+  sync(){
+    if(!this.context||!this.master)return;
+    const now=this.context.currentTime;
+    this.master.gain.cancelScheduledValues(now);
+    this.master.gain.setValueAtTime(this.enabled&&!this.suspended?this.settings.volume:0,now);
+    this.musicBus.gain.cancelScheduledValues(now);
+    this.musicBus.gain.setValueAtTime(this.settings.music?1:0,now);
+  }
+  toggle(){
+    this.enabled=!this.enabled;
+    if(this.enabled){
+      const C=globalThis.AudioContext||globalThis.webkitAudioContext;
+      if(C){
+        if(!this.context){this.context=new C();this.master=this.context.createGain();this.master.connect(this.context.destination);this.musicBus=this.context.createGain();this.musicBus.connect(this.master);}
+        this.context.resume().catch(()=>{});
+      }else this.enabled=false;
+    }
+    this.sync();return this.enabled;
+  }
+  tone(frequency,duration,gain,type='sine',end=frequency,music=false){
+    if(!this.enabled||!this.context||this.suspended||this.settings.volume===0)return;
+    const c=this.context,o=c.createOscillator(),g=c.createGain(),now=c.currentTime;
+    o.type=type;o.frequency.setValueAtTime(frequency,now);o.frequency.exponentialRampToValueAtTime(end,now+duration);
+    g.gain.setValueAtTime(.001,now);g.gain.linearRampToValueAtTime(gain,now+.02);g.gain.exponentialRampToValueAtTime(.001,now+duration);
+    o.connect(g);g.connect(music?this.musicBus:this.master);o.start();o.stop(now+duration+.02);o.onended=()=>{o.disconnect();g.disconnect();};
+  }
+  hit(enemy){this.tone(enemy?140:220,.16,.2,'triangle',40);}
+  update(dt,playing){
+    if(!playing||this.suspended||!this.enabled||!this.settings.music)return;
+    this.clock-=dt;if(this.clock>0)return;this.clock=.48;
+    const notes=[146.83,220,174.61,220,130.81,196,164.81,196,146.83,233.08,220,174.61,130.81,164.81,196,110];
+    const note=notes[this.beat%notes.length];
+    this.tone(note,.43,.055,'sine',note,true);
+    if(this.beat%4===0)this.tone(note/2,1.4,.06,'triangle',note/2,true);this.beat++;
+  }
+};
+
+</script><script>
+// Source: js/render.js
+SR.Renderer = class {
+  constructor(canvas){this.ctx=canvas.getContext('2d');this.canvas=canvas;}
+  draw(g){
+    const c=this.ctx,t=g.elapsed,region=g.stage?.region||0; c.clearRect(0,0,1280,720);
+    const sky=c.createLinearGradient(0,0,0,720);sky.addColorStop(0,['#100f20','#071d2b','#210e19'][region]);sky.addColorStop(.65,['#3c284b','#164659','#62313c'][region]);sky.addColorStop(1,'#140f1d');c.fillStyle=sky;c.fillRect(0,0,1280,720);
+    const moonX=880-g.camera*.08;
+    const halo=c.createRadialGradient(moonX,181,42,moonX,181,240);halo.addColorStop(0,'#bd87e62c');halo.addColorStop(1,'#aa65ff00');c.fillStyle=halo;c.fillRect(0,0,1280,500);
+    c.fillStyle='#b497c4';c.beginPath();c.arc(moonX,181,63,0,Math.PI*2);c.fill();c.fillStyle='#211a30';c.beginPath();c.arc(moonX-19,169,59,0,Math.PI*2);c.fill();
+    for(let layer=0;layer<3;layer++){
+      c.save();c.translate(-g.camera*(.12+layer*.18),0);c.fillStyle=['#242035','#292137','#201a2b'][layer];
+      for(let i=0;i<19;i++){const x=i*177-140,y=355+layer*66,h=65+((i*71+layer*43)%143);c.fillRect(x,y-h,99,h+220);c.beginPath();c.moveTo(x-10,y-h);c.lineTo(x+36,y-h-54);c.lineTo(x+110,y-h);c.fill();if(layer===2){c.fillStyle='#71546b33';c.fillRect(x+40,y-h+22,10,24);c.fillStyle='#201a2b';}}
+      c.restore();
+    }
+    c.save();c.translate(-g.camera,0);
+    if(region===1){for(let i=0;i<18;i++){const x=i*135;c.fillStyle=i%2?'#4185a355':'#63b8bf55';c.beginPath();c.moveTo(x,570);c.lineTo(x+30,400-i%3*30);c.lineTo(x+60,570);c.fill();}}
+    if(region===2){for(let i=0;i<20;i++){const x=i*120;c.fillStyle='#ce563e44';c.fillRect(x,520,5,50);c.fillStyle='#e2884a44';c.fillRect(x-3,500+Math.sin(t+i)*8,11,25);}}
+    if(g.stageId===1){for(let i=0;i<12;i++){const x=i*205;c.strokeStyle='#160f1e';c.lineWidth=15;c.beginPath();c.moveTo(x,570);c.lineTo(x+12,300);c.lineTo(x-35,250);c.moveTo(x+10,370);c.lineTo(x+75,285);c.stroke();}}
+
+    // Broken stone arches, dead branches and the sealed rift are all local geometry.
+    for(let i=0;i<7;i++){const x=i*360+80;c.fillStyle='#15121f';c.fillRect(x,330,28,240);c.fillRect(x+126,310,33,260);c.strokeStyle='#171320';c.lineWidth=23;c.beginPath();c.arc(x+78,335,64,Math.PI,Math.PI*2);c.stroke();c.fillStyle='#31263d';c.fillRect(x-5,426,40,8);}
+    c.save();c.translate(1970,420);c.strokeStyle='#9c66d8';c.shadowColor='#9e52ff';c.shadowBlur=26;c.lineWidth=3;c.beginPath();c.ellipse(0,0,36+Math.sin(t)*3,131,0,0,Math.PI*2);c.stroke();c.shadowBlur=0;c.fillStyle='#b38be622';c.fill();c.restore();
+    c.fillStyle='#12101a';c.fillRect(0,570,2200,150);c.fillStyle='#65506d';c.fillRect(0,570,2200,3);c.fillStyle='#2b2236';c.fillRect(0,577,2200,5);
+    for(let i=0;i<90;i++){const x=i*29;c.fillStyle=i%3?'#31253b':'#47334c';c.fillRect(x,580+(i*31)%115,12+(i%4)*8,2);}
+    c.strokeStyle='#8f66b955';c.lineWidth=2;for(const x of [5,2195]){c.beginPath();c.moveTo(x,330);c.lineTo(x,570);c.stroke();}
+    c.save();if(g.shake>0)c.translate(Math.sin(t*113)*g.shake*10,Math.cos(t*89)*g.shake*7);
+    for(const h of g.hazards||[]){c.fillStyle=h.wait>0?'#ff3e5a44':'#ff436caa';c.strokeStyle='#ff839b';c.lineWidth=3;c.beginPath();c.ellipse(h.x,565,h.r,12,0,0,Math.PI*2);c.fill();c.stroke();c.font='bold 15px Arial';c.textAlign='center';c.fillStyle='#ffd2db';c.fillText(h.wait>0?'DODGE':'RIFT',h.x,535);if(h.wait<=0){c.fillStyle='#ff3e5a77';c.fillRect(h.x-h.r,460,h.r*2,110);}}
+    for(const e of g.enemies||[g.enemy])this.actor(e,t);this.actor(g.player,t);
+    for(const p of g.particles){c.globalAlpha=Math.max(0,p.life/p.max);c.fillStyle=p.color;c.fillRect(p.x,p.y,p.size,p.size);}c.globalAlpha=1;
+    for(const n of g.numbers){c.globalAlpha=Math.min(1,n.life*2);c.fillStyle=n.color;c.font='bold 26px Georgia';c.textAlign='center';c.fillText(n.text,n.x,n.y);}c.globalAlpha=1;
+    c.restore();c.restore();
+    for(let i=0;i<(g.progress?.settings.effects==='low'?8:34);i++){const x=((i*173+t*(7+i%5))%1320)-20,y=170+(i*79)%370+Math.sin(t+i)*10;c.fillStyle=i%3?'#bd91e02e':'#ddaeec55';c.fillRect(x,y,2,2);}
+    const shade=c.createLinearGradient(0,590,0,720);shade.addColorStop(0,'#08060b00');shade.addColorStop(1,'#08060bcc');c.fillStyle=shade;c.fillRect(0,590,1280,130);
+  }
+  actor(a,t){
+    const c=this.ctx,enemy=a.team==='enemy',color=enemy?'#ec708a':'#c99aff';
+    c.save();c.translate(a.x,a.y);c.fillStyle='#05040888';c.beginPath();c.ellipse(0,2,40,9,0,0,Math.PI*2);c.fill();
+    if(a.hp<=0){c.globalAlpha=.45;c.translate(0,-12);c.rotate(a.face*1.35);}
+    if (a.dash > 0) {
+      for (let i = 1; i <= 4; i++) {
+        c.fillStyle = `rgba(172,113,238,${.18 - i * .025})`;
+        c.fillRect(-a.face * i * 25 - 15, -a.h + 10, 30, a.h - 10);
+      }
+    }
+    if(enemy&&a.hp>0){c.fillStyle='#08060c';c.fillRect(-30,-a.h-38,60,4);c.fillStyle=a.boss?'#ff6a89':'#b46988';c.fillRect(-30,-a.h-38,60*a.hp/a.maxHp,4);}
+    if(a.boss){c.strokeStyle='#ff8499';c.lineWidth=3;c.beginPath();c.moveTo(-15,-a.h);c.lineTo(-22,-a.h-23);c.lineTo(0,-a.h-12);c.lineTo(22,-a.h-23);c.lineTo(15,-a.h);c.stroke();}
+    c.scale(a.face,1);
+    if (a.blocking) {
+      c.strokeStyle = '#8cdeff'; c.lineWidth = 4; c.shadowColor = '#6bccff'; c.shadowBlur = 16;
+      c.beginPath(); c.ellipse(15, -52, 35, 55, 0, -1.4, 1.4); c.stroke(); c.shadowBlur = 0;
+    }
+    const stride=a.grounded?Math.sin(a.walk)*12:8,bob=a.grounded?Math.sin(a.walk*2)*2:0;c.translate(0,bob);
+    // Cloak, articulated legs, hood and a distinct luminous blade.
+    c.fillStyle=enemy?'#211724':'#211a34';c.strokeStyle=enemy?'#865062':'#85649f';c.lineWidth=1.5;
+    c.beginPath();c.moveTo(-16,-80);c.lineTo(-35-Math.sin(t*4)*5,-16);c.lineTo(4,-32);c.lineTo(15,-75);c.closePath();c.fill();c.stroke();
+    c.strokeStyle=a.flash>0?'#fff':'#090910';c.lineWidth=12;c.lineCap='round';c.beginPath();c.moveTo(-8,-40);c.lineTo(-12-stride,-7);c.lineTo(-3-stride,-5);c.moveTo(8,-40);c.lineTo(12+stride,-7);c.lineTo(21+stride,-5);c.stroke();
+    c.fillStyle=a.flash>0?'#ede1ff':'#0a0a13';c.beginPath();c.moveTo(-15,-78);c.lineTo(13,-78);c.lineTo(21,-37);c.lineTo(-15,-35);c.closePath();c.fill();c.strokeStyle='#6d506e';c.lineWidth=2;c.stroke();
+    c.fillStyle=a.flash>0?'#fff':'#0b0a14';c.beginPath();c.ellipse(0,-a.h+16,15,20,0,0,Math.PI*2);c.fill();c.strokeStyle=color;c.lineWidth=1;c.stroke();
+    c.fillStyle=color;c.shadowColor=color;c.shadowBlur=10;c.fillRect(5,-a.h+14,10,3);c.shadowBlur=0;
+    c.fillStyle=enemy?'#8f334e':'#7951a1';c.fillRect(-15,-48,32,5);
+    const atk=a.attack,active=atk&&atk.time>=atk.windup&&atk.time<atk.windup+atk.active;
+    c.save();c.translate(8,-64);c.rotate(active?-.8:atk?-1.9:.55);c.strokeStyle='#14111f';c.lineWidth=10;c.beginPath();c.moveTo(0,0);c.lineTo(28,12);c.stroke();c.strokeStyle='#8b729a';c.lineWidth=5;c.beginPath();c.moveTo(28,25);c.lineTo(28,-35);c.stroke();c.strokeStyle=color;c.lineWidth=2;c.beginPath();c.moveTo(31,12);c.lineTo(31,-43);c.stroke();c.restore();
+    if(atk){
+      if(atk.time<atk.windup){c.strokeStyle=enemy?'#ff496d':'#caa0ff';c.globalAlpha=.4+.5*atk.time/atk.windup;c.lineWidth=3;c.beginPath();c.ellipse(atk.radial?0:atk.range/2,-3,atk.radial?atk.range:atk.range/2,8,0,0,Math.PI*2);c.stroke();c.globalAlpha=1;if(enemy){c.fillStyle='#ff8296';c.font='bold 26px Arial';c.textAlign='center';c.fillText(atk.guardBreak?'BREAK':'!',0,-a.h-18);}}
+      if(active){c.strokeStyle=color;c.shadowColor=color;c.shadowBlur=18;c.lineWidth=['heavy','finisher','eclipse'].includes(atk.type)?13:7;c.beginPath();c.ellipse(atk.radial?0:12,-58,atk.radial?atk.range:atk.range-12,atk.radial?100:62,0,atk.radial?0:-1.3,atk.radial?Math.PI*2:1.2);c.stroke();c.shadowBlur=0;}
+    }
+    c.restore();
+  }
+};
+
+</script><script>
+// Source: js/ui.js
+SR.UI = class {
+  constructor(game){
+    document.querySelector('.brand').onclick=event=>{event.preventDefault();game.showMenu();};
+    this.game=game;this.overlay=document.getElementById('overlay');this.menu=document.getElementById('menu-content');
+    document.getElementById('sound').onclick=()=>{const enabled=game.audio.toggle(),b=document.getElementById('sound');b.textContent=enabled?'SOUND ON':'SOUND OFF';b.setAttribute('aria-pressed',String(enabled));if(game.state==='playing')game.canvas.focus();};
+  }
+  screen(state){
+    const g=this.game,p=g.progress;g.state=state;g.audio.setSuspended(state!=='playing');
+    this.overlay.hidden=state==='playing';document.getElementById('hud').hidden=!['playing','paused','victory','defeat'].includes(state);document.getElementById('ability-hud').hidden=state!=='playing';
+    if(state==='playing')return;
+    this.menu.classList.toggle('wide', ['stages','upgrades','settings'].includes(state));
+    let title='SHADOW RIFT',sub='LAST ECLIPSE',body='',buttons=[];
+    const add=(label,fn,id,disabled=false)=>buttons.push({label,fn,id,disabled});
+    if(state==='menu'){
+      body=`<p>Sembilan rift. Tiga kerajaan yang runtuh. Satu kesempatan terakhir.</p><p>LEVEL ${SR.level(p)} · ${p.xp} XP · ${p.coins} COINS · ${p.completed.length}/9 STAGES</p>`;
+      if(g.activeRun)add('RESUME BATTLE',()=>g.resume(),'primary');else if(p.started)add('CONTINUE',()=>g.start(p.unlocked),'primary');
+      add('NEW GAME',()=>p.started?this.screen('confirm'):g.newGame(),p.started?'new-game':'primary');
+      add('STAGE SELECT',()=>this.screen('stages'),'stages');add('UPGRADE',()=>this.screen('upgrades'),'upgrades');add('SETTINGS',()=>g.openSettings(),'settings');add('EXIT',()=>this.screen('exit'),'exit');
+    }else if(state==='confirm'){
+      title='NEW JOURNEY';sub='RESET PROGRESS?';body='<p>New Game menghapus progres dan upgrade saat ini. Export save melalui Settings jika ingin menyimpannya.</p>';
+      add('RESET & START',()=>g.newGame(),'primary');
+    }else if(state==='stages'){
+      title='THE NINE RIFTS';sub='STAGE SELECT';body='<div class="stage-grid">'+SR.stages.map(s=>`<button data-stage="${s.id}" ${s.id>p.unlocked?'disabled':''}><small>${SR.regions[s.region]}</small><strong>${s.id+1}. ${s.name}</strong><span>${s.id>p.unlocked?'LOCKED':p.ranks[s.id]?'RANK '+p.ranks[s.id]:'AVAILABLE'}${s.boss?' · BOSS':''}</span></button>`).join('')+'</div>';
+    }else if(state==='upgrades'){
+      title='SHADOW FORGE';sub=`LEVEL ${SR.level(p)} · ${p.coins} COINS`;
+      const names={hp:'Vitality · +20 HP',damage:'Blade · +12% damage',energy:'Spirit · +15 energy',cooldown:'Focus · −8% skill cooldown'};
+      body='<div class="upgrade-grid">'+Object.keys(p.upgrades).map(key=>`<button data-upgrade="${key}" ${p.upgrades[key]>=5||p.coins<SR.upgradeCost(p,key)?'disabled':''}><strong>${names[key]}</strong><span>${p.upgrades[key]}/5 · ${p.upgrades[key]===5?'MAX':SR.upgradeCost(p,key)+' COINS'}</span></button>`).join('')+'</div><p>Upgrade berlaku pada pertarungan berikutnya. Level naik setiap 250 XP: +4 HP dan +2,5% damage.</p>';
+    }else if(state==='settings'){
+      title='SETTINGS';sub='OFFLINE · YOUR WAY';
+      body=`<div class="settings"><label>Volume <input id="volume" type="range" min="0" max="100" value="${p.settings.volume*100}"></label><label><input id="music" type="checkbox" ${p.settings.music?'checked':''}> Musik procedural</label><label><input id="shake" type="checkbox" ${p.settings.shake?'checked':''}> Screen shake</label><label>Kualitas efek <select id="effects"><option value="high" ${p.settings.effects==='high'?'selected':''}>High</option><option value="low" ${p.settings.effects==='low'?'selected':''}>Low</option></select></label></div><p>Save otomatis tersimpan pada browser ini. Export/Import untuk pindah perangkat atau versi HTML/server. Import mengganti progres saat ini dan mengakhiri pertarungan yang masih aktif.</p><input id="import-file" type="file" accept="application/json,.json" hidden><p id="import-message"></p>`;
+      add('EXPORT SAVE',()=>this.exportSave(),'export-save');add('IMPORT SAVE',()=>document.getElementById('import-file').click(),'import-save');
+    }else if(state==='paused'){
+      title='PAUSED';sub='TAKE A BREATH';body='<p>Pertarungan, energi, dan cooldown dijeda.</p>';add('LANJUTKAN',()=>g.resume(),'primary');add('RETRY',()=>g.start(),'retry');add('SETTINGS',()=>g.openSettings(),'settings');
+    }else if(state==='victory'){
+      title=g.stageId===8?'DAWN RETURNS':'RIFT SILENCED';sub=`VICTORY · RANK ${g.reward.rank}`;
+      body=`<p>${g.stage.name} selesai dalam ${g.elapsed.toFixed(1)} detik. ${g.kills} musuh dikalahkan.</p><p>+${g.reward.xp} XP · +${g.reward.coins} COINS · LEVEL ${SR.level(p)}${g.reward.first?' · FIRST CLEAR':''}</p><p>${g.stageId===1?'Umbral Nova (I) unlocked.':g.stageId===5?'Last Eclipse (O) unlocked.':g.stageId===8?'Gerhana berakhir. Semua stage dapat dimainkan ulang.':'Rift berikutnya menunggu.'}</p>`;
+      if(g.stageId<8)add('NEXT STAGE',()=>g.start(g.stageId+1),'primary');add('REPLAY',()=>g.start(),'replay');add('UPGRADE',()=>this.screen('upgrades'),'upgrades');
+    }else if(state==='defeat'){
+      title='NOT THE END';sub='DEFEAT';body='<p>Hindari tanda merah, gunakan dash, dan serang ketika musuh pulih. Tidak ada hadiah diberikan untuk kekalahan.</p>';add('COBA LAGI',()=>g.start(),'primary');
+    }else if(state==='exit'){
+      title='UNTIL DAWN';sub=g.save.write(p)?'PROGRESS SAVED':'EXPORT SAVE BEFORE CLOSING';body='<p>Kamu boleh menutup tab ini. Browser tidak mengizinkan game menutup tab yang dibuka manual.</p>';
+    }
+    if(state!=='menu')add(state==='settings'&&g.panelReturn==='paused'&&g.activeRun?'BACK TO PAUSE':'BACK / MENU',()=>g.back(),'back');
+    this.menu.innerHTML=`<div class="eyebrow">SHADOW RIFT · CAMPAIGN</div><h1>${title}</h1><h2>${sub}</h2>${body}<p id="save-status"></p><div class="buttons">${buttons.map((b,i)=>`<button id="${b.id}" class="${i===0?'primary':''}" ${b.disabled?'disabled':''}>${b.label}</button>`).join('')}</div>`;
+    document.getElementById('save-status').textContent=g.save.message;
+    for(const b of buttons)document.getElementById(b.id).onclick=b.fn;
+    for(const b of this.menu.querySelectorAll('[data-stage]'))b.onclick=()=>g.start(Number(b.dataset.stage));
+    for(const b of this.menu.querySelectorAll('[data-upgrade]'))b.onclick=()=>{if(SR.buyUpgrade(p,b.dataset.upgrade)){g.save.write(p);this.screen('upgrades');}};
+    if(state==='settings'){
+      for(const key of ['volume','music','shake','effects'])document.getElementById(key).oninput=()=>{
+        const el=document.getElementById(key);p.settings[key]=key==='volume'?Number(el.value)/100:key==='effects'?el.value:el.checked;
+        g.audio.settings=p.settings;g.save.write(p);document.getElementById('save-status').textContent=g.save.message;
+      };
+      const fileInput=document.getElementById('import-file');
+      fileInput.onchange=async event=>{
+        const current=()=>fileInput.isConnected&&g.state==='settings';
+        try{
+          const file=event.target.files[0];if(!file)return;if(file.size>100000)throw new Error();
+          const text=await file.text();
+          // A file dialog/read may complete after the user has left this panel.
+          if(!current())return;
+          const imported=SR.validateSave(JSON.parse(text));
+          g.progress=imported;g.activeRun=false;g.panelReturn='menu';g.audio.settings=imported.settings;
+          g.save.write(imported);this.screen('settings');document.getElementById('import-message').textContent='Import berhasil.';
+        }catch(e){if(current())document.getElementById('import-message').textContent='Save tidak valid; progres saat ini dipertahankan.';}
+      };
+    }
+  }
+  exportSave(){const blob=new Blob([JSON.stringify(this.game.progress,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='Shadow-Rift-save.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
+  update(){
+    const g=this.game,p=g.player,e=g.enemy;
+    for(const [name,a] of [['player',p],['enemy',e]]){document.getElementById(name+'-hp').textContent=`${a.hp} / ${a.maxHp}`;document.getElementById(name+'-bar').style.width=`${a.hp/a.maxHp*100}%`;}
+    document.querySelector('.enemy-health strong').textContent=e.name||'RIFT SENTINEL';
+    document.querySelector('.objective>span').textContent=g.stage.name.toUpperCase();
+    document.querySelector('.chapter>span').textContent=`${g.stageId+1} / ${SR.regions[g.stage.region].toUpperCase()}`;
+    document.querySelector('.arena-caption>span').textContent=g.stage.name.toUpperCase();
+    document.getElementById('enemy-state').textContent=e.boss?`BOSS · PHASE ${e.phase}`:e.attack?.guardBreak?'⚠ GUARD BREAK':e.intent||'';
+    document.getElementById('objective').textContent=g.waveDelay>0?'Rift berikutnya terbuka…':`WAVE ${g.wave+1}/${g.stage.waves.length} · ${g.enemies.length} musuh`;
+    document.getElementById('energy-value').textContent=`${Math.floor(p.energy)} / ${p.maxEnergy}`;document.getElementById('energy-bar').style.width=`${p.energy/p.maxEnergy*100}%`;
+    document.getElementById('combo-state').textContent=p.comboFlash>0?p.comboLabel:p.combo?`${p.combo.split('').join(' → ')} → ${p.combo==='JJ'?'K · FINISHER':'J → K'}`:'COMBO · J → J → K';
+    for(const [type,cost,cd] of [['dash',20,p.dashCooldown],...Object.entries(SR.skills).map(([k,s])=>[k,s.cost,p.skillCooldowns[k]])]){
+      const locked=type!=='dash'&&!p.unlockedSkills[type];document.getElementById('ability-'+type).classList.toggle('unavailable',locked||cd>0||p.energy<cost);
+      document.getElementById(type+'-status').textContent=locked?`CLEAR STAGE ${type==='nova'?2:6}`:`${cost} EN · ${cd>0?cd.toFixed(1)+'s':p.energy<cost?'LOW ENERGY':'READY'}`;
+    }
+    document.getElementById('action-notice').textContent=p.guardBroken>0?'GUARD BROKEN · EVADE':p.blocking?'GUARD · FRONT ONLY':p.noticeTime>0?p.notice:'';
+  }
+};
+
+</script><script>
+// Source: js/stages.js
+SR.regions = ['The Fallen Kingdom', 'The Cursed Abyss', 'The Eternal Eclipse'];
+SR.stages = [
+  {name:'Ashen Village', waves:[['scout'],['scout','guard']]},
+  {name:'Bloodwood Forest', waves:[['scout','scout'],['guard','caster']]},
+  {name:'Ruined Citadel', waves:[['guard','scout'],['boss']], boss:'Veyr, the Hollow Crown'},
+  {name:'Hollow Temple', waves:[['caster','scout'],['guard','caster']]},
+  {name:'Crystal Catacombs', waves:[['scout','caster'],['guard','scout','caster']]},
+  {name:'Abyss Gate', waves:[['caster','guard'],['boss']], boss:'Nhal, Abyss Keeper'},
+  {name:'Ember Fortress', waves:[['guard','guard'],['scout','caster','guard']]},
+  {name:'Throne of Shadows', waves:[['scout','caster','scout'],['guard','caster','guard']]},
+  {name:'The Last Eclipse', waves:[['guard','caster'],['boss']], boss:'Astrael, Eclipse Sovereign'}
+].map((s,i)=>({...s,id:i,region:Math.floor(i/3),coins:70+i*15,xp:90+i*20}));
+SR.spawnWave = (stage, wave, player) => stage.waves[wave].map((type,i)=>{
+  const e = type === 'boss' ? SR.makeBoss(stage) : SR.makeEnemy();
+  e.kind=type; e.name=type==='boss'?stage.boss:{scout:'Ash Stalker',guard:'Rift Sentinel',caster:'Hex Weaver'}[type];
+  if(type!=='boss'){
+    e.maxHp=e.hp=({scout:45,guard:75,caster:55}[type])+stage.region*12;
+    e.speed={scout:180,guard:125,caster:125}[type];
+    e.damageScale=.65+stage.region*.12;
+  }
+  const side=player.x>1450?-1:1;
+  e.x=Math.max(70,Math.min(2130,player.x+side*(360+i*105)));
+  e.cooldown=1.1+i*.4; e.spawnGrace=.8; return e;
+});
+
+</script><script>
+// Source: js/progression.js
+SR.freshProgress = () => ({version:1,started:false,unlocked:0,completed:[],coins:0,xp:0,upgrades:{hp:0,damage:0,energy:0,cooldown:0},ranks:{},settings:{volume:.45,music:true,effects:'high',shake:true}});
+SR.level = progress => 1+Math.floor(progress.xp/250);
+SR.upgradeCost = (p,key) => 70+p.upgrades[key]*50;
+SR.buyUpgrade = (p,key) => {
+  if(!Object.hasOwn(p.upgrades,key)||p.upgrades[key]>=5)return false;
+  const cost=SR.upgradeCost(p,key);if(p.coins<cost)return false;
+  p.coins-=cost;p.upgrades[key]++;return true;
+};
+SR.applyProgress = (player,p) => {
+  const level=SR.level(p)-1;
+  player.maxHp=player.hp=120+p.upgrades.hp*20+level*4;
+  player.maxEnergy=player.energy=100+p.upgrades.energy*15;
+  player.damageScale=1+p.upgrades.damage*.12+level*.025;
+  player.cooldownScale=1-p.upgrades.cooldown*.08;
+  player.unlockedSkills={rift:true,nova:p.completed.includes(1),eclipse:p.completed.includes(5)};
+};
+SR.finishStage = (p,id,stats) => {
+  if(!Number.isInteger(id)||id<0||id>p.unlocked||id>=9)throw new Error('Invalid stage completion');
+  const rank=stats.damageTaken===0&&stats.time<120?'S':stats.damageTaken<60&&stats.time<160?'A':stats.damageTaken<140?'B':'C';
+  const first=!p.completed.includes(id),stage=SR.stages[id];
+  const coins=first?stage.coins:Math.floor(stage.coins*.25),xp=first?stage.xp:Math.floor(stage.xp*.3);
+  p.coins+=coins;p.xp+=xp;p.started=true;
+  if(first)p.completed.push(id);
+  p.unlocked=Math.min(8,Math.max(p.unlocked,id+1));
+  if(!p.ranks[id]||'CBAS'.indexOf(rank)>'CBAS'.indexOf(p.ranks[id]))p.ranks[id]=rank;
+  return {rank,coins,xp,first};
+};
+
+</script><script>
+// Source: js/save.js
+SR.validateSave = value => {
+  const integer=(n,min,max)=>Number.isInteger(n)&&n>=min&&n<=max;
+  if(!value||value.version!==1||typeof value.started!=='boolean'||!integer(value.unlocked,0,8)||!integer(value.coins,0,100000000)||!integer(value.xp,0,100000000))throw new Error('Invalid save');
+  if(!Array.isArray(value.completed)||value.completed.length>9||new Set(value.completed).size!==value.completed.length)throw new Error('Invalid stages');
+  const completed=[...value.completed].sort((a,b)=>a-b);
+  if(completed.some((id,i)=>id!==i)||value.unlocked!==Math.min(8,completed.length))throw new Error('Invalid progression');
+  const p=SR.freshProgress();
+  Object.assign(p,{started:value.started,unlocked:value.unlocked,coins:value.coins,xp:value.xp,completed});
+  for(const k of Object.keys(p.upgrades)){if(!integer(value.upgrades?.[k],0,5))throw new Error('Invalid upgrade');p.upgrades[k]=value.upgrades[k];}
+  if(!value.ranks||typeof value.ranks!=='object')throw new Error('Invalid ranks');
+  for(const id of completed){if(!['C','B','A','S'].includes(value.ranks[id]))throw new Error('Invalid rank');p.ranks[id]=value.ranks[id];}
+  const s=value.settings;
+  if(!s||typeof s.volume!=='number'||!Number.isFinite(s.volume)||s.volume<0||s.volume>1||typeof s.music!=='boolean'||typeof s.shake!=='boolean'||!['low','high'].includes(s.effects))throw new Error('Invalid settings');
+  p.settings={volume:s.volume,music:s.music,shake:s.shake,effects:s.effects};return p;
+};
+SR.Save = class {
+  constructor(storage){this.storage=storage;this.key='shadow-rift-save-v1';this.backupKey=this.key+'-backup';this.message='';}
+  load(){
+    this.message='';
+    let raw;
+    try{
+      raw=this.storage.getItem(this.key);
+      if(raw)return SR.validateSave(JSON.parse(raw));
+    }catch(e){ /* Try the last validated checkpoint below. */ }
+    try{
+      const backup=this.storage.getItem(this.backupKey);
+      if(backup){
+        const recovered=SR.validateSave(JSON.parse(backup));
+        this.message='Save utama tidak tersedia atau rusak. Cadangan terakhir berhasil dipulihkan; beberapa progres terbaru mungkin belum tercatat.';
+        return recovered;
+      }
+      if(!raw&&this.storage.getItem(this.key)===null)return SR.freshProgress();
+    }catch(e){ /* A blocked store must not prevent offline play. */ }
+    this.message='Save tidak dapat dibaca atau rusak. Progres baru digunakan; data lama tidak dihapus sampai kamu menyimpan progres baru.';
+    return SR.freshProgress();
+  }
+  write(p){
+    try{
+      const data=JSON.stringify(SR.validateSave(p));
+      // A corrupt primary must never overwrite a healthy backup. Backup quota failures
+      // must not prevent a smaller primary update from succeeding.
+      try{
+        const previous=this.storage.getItem(this.key);
+        if(previous){const valid=JSON.stringify(SR.validateSave(JSON.parse(previous)));this.storage.setItem(this.backupKey,valid);}
+      }catch(e){}
+      this.storage.setItem(this.key,data);this.message='';return true;
+    }catch(e){this.message='Save lokal tidak tersedia. Gunakan Export Save sebelum menutup game.';return false;}
+  }
+};
+
+</script><script>
+// Source: js/bosses.js
+SR.makeBoss = stage => ({...SR.makeEnemy(),boss:true,bossRegion:stage.region,h:128,w:64,maxHp:260+stage.region*90,hp:260+stage.region*90,speed:140,phase:1,attacks:0,damageScale:.85+stage.region*.12});
+SR.updateBoss = (e,p,dt,game) => {
+  const phases=e.bossRegion===2?3:2;
+  const phase=e.hp/e.maxHp<=.33&&phases===3?3:e.hp/e.maxHp<=.66?2:1;
+  if(phase>e.phase){e.phase=phase;SR.notifyPlayer(p,`BOSS · PHASE ${phase}`);}
+  if(e.stun>0||e.hp<=0)return;
+  e.vx=0;if(e.attack)return;
+  e.face=p.x<e.x?-1:1;
+  const distance=Math.abs(e.x-p.x);
+  if(distance>190){e.vx=e.face*(e.speed+phase*12);return;}
+  if(e.cooldown>0||e.spawnGrace>0||e.x<game.camera+25||e.x>game.camera+1255)return;
+  const patterns=[['enemyHeavy','bossSweep'],['bossHex','bossSweep','enemyHeavy'],['bossSweep','bossHex','enemyHeavy']];
+  const pattern=patterns[e.bossRegion];
+  const type=pattern[e.attacks++%pattern.length];
+  if(SR.beginAttack(e,type)){
+    e.attack.windup*=1-(phase-1)*.12;
+    e.attack.damage=Math.round(e.attack.damage*(1+(phase-1)*.12));
+    if(type==='bossHex'){
+      // Telegraph a stationary ground zone; the player can leave it before activation.
+      e.attack=null;e.cooldown=1.7-(phase-1)*.2;
+      game.hazards.push({x:p.x,y:570,r:65+phase*10,wait:1.05-(phase-1)*.1,life:.35,damage:18+phase*3,hit:false});
+      if(phase===3)game.hazards.push({x:Math.max(80,Math.min(2120,p.x+160*p.face)),y:570,r:65,wait:1.25,life:.35,damage:22,hit:false});
+    }
+  }
+};
+
+</script><script>
+// Source: js/game.js
+SR.Game = class {
+  constructor(){
+    this.canvas=document.getElementById('game');this.input=new SR.Input();this.audio=new SR.Audio();this.renderer=new SR.Renderer(this.canvas);
+    let storage;try{storage=localStorage;}catch(e){storage={getItem(){throw e;},setItem(){throw e;}};}
+    this.save=new SR.Save(storage);this.progress=this.save.load();this.audio.settings=this.progress.settings;
+    this.reset(0);this.state='menu';this.ui=new SR.UI(this);this.ui.screen(this.state);this.last=0;this.accumulator=0;
+    window.addEventListener('blur',()=>this.pause());document.addEventListener('visibilitychange',()=>{if(document.hidden)this.pause();});
+    requestAnimationFrame(t=>this.frame(t));
+  }
+  reset(id){
+    this.stage=SR.stages[id];this.stageId=id;this.player=SR.makePlayer();SR.applyProgress(this.player,this.progress);
+    this.enemies=[];this.enemy=SR.makeEnemy();this.elapsed=0;this.camera=0;this.particles=[];this.numbers=[];this.hazards=[];
+    this.shake=0;this.accumulator=0;this.activeRun=false;this.panelReturn='menu';this.wave=0;this.waveDelay=0;this.damageTaken=0;this.kills=0;this.reward=null;this.settled=false;this.input.clear();
+  }
+  start(id=this.stageId){
+    if(!Number.isInteger(id)||id<0||id>this.progress.unlocked||id>=9)return false;
+    this.reset(id);this.progress.started=true;this.save.write(this.progress);this.enemies=SR.spawnWave(this.stage,0,this.player);this.enemy=this.enemies[0];
+    this.activeRun=true;this.state='playing';this.ui.screen(this.state);this.ui.update();this.canvas.focus();return true;
+  }
+  newGame(){const settings={...this.progress.settings};this.progress=SR.freshProgress();this.progress.settings=settings;this.audio.settings=this.progress.settings;this.save.write(this.progress);this.start(0);}
+  showMenu(){this.state='menu';this.input.clear();this.player.buffer=null;this.ui.screen(this.state);}
+  openSettings(){this.panelReturn=this.state==='paused'?'paused':'menu';this.input.clear();this.ui.screen('settings');}
+  back(){if(this.state==='settings'&&this.panelReturn==='paused'&&this.activeRun)this.ui.screen('paused');else this.showMenu();}
+  pause(){if(this.state!=='playing')return;this.state='paused';this.input.clear();this.player.buffer=null;this.ui.screen(this.state);}
+  resume(){if(!this.activeRun||this.settled)return false;this.state='playing';this.input.clear();this.ui.screen(this.state);this.canvas.focus();}
+  hit(target,damage,face,event='hit'){
+    if(target.team==='player')this.damageTaken+=damage;
+    this.audio.hit(target.team==='enemy');this.shake=this.progress.settings.shake?.65:0;
+    this.numbers.push({x:target.x,y:target.y-target.h-15,text:event==='block'?`BLOCK −${damage}`:event==='break'?`BREAK −${damage}`:String(damage),color:target.team==='enemy'?'#e5c4ff':'#ff8a9e',life:.85});
+    const count=this.progress.settings.effects==='low'?4:15;
+    for(let i=0;i<count;i++)this.particles.push({x:target.x,y:target.y-60,vx:face*(40+Math.random()*220)+(Math.random()-.5)*130,vy:(Math.random()-.6)*280,life:.25+Math.random()*.25,max:.5,size:2+Math.random()*3,color:target.team==='enemy'?'#c796ff':'#ff667e'});
+    if(this.particles.length>250)this.particles.splice(0,this.particles.length-250);
+  }
+  finish(won){
+    if(this.settled)return;this.settled=true;this.activeRun=false;this.state=won?'victory':'defeat';
+    if(won){this.reward=SR.finishStage(this.progress,this.stageId,{time:this.elapsed,damageTaken:this.damageTaken});this.save.write(this.progress);}
+    this.input.clear();this.ui.screen(this.state);this.ui.update();
+  }
+  step(dt){
+    if(this.state!=='playing')return;
+    this.elapsed+=dt;this.audio.update(dt,true);SR.updatePlayer(this.player,this.input,dt);SR.tickActor(this.player,dt);
+    for(const e of this.enemies){
+      e.spawnGrace=Math.max(0,(e.spawnGrace||0)-dt);
+      if(e.boss)SR.updateBoss(e,this.player,dt,this);else SR.updateEnemy(e,this.player,dt,this);
+      SR.tickActor(e,dt);SR.separate(this.player,e);
+    }
+    for(let i=0;i<this.enemies.length;i++)for(let j=i+1;j<this.enemies.length;j++)SR.separate(this.enemies[i],this.enemies[j]);
+    SR.resolveAttack(this.player,this.enemies,dt,(...args)=>this.hit(...args));
+    for(const e of this.enemies)if(e.hp>0)SR.resolveAttack(e,this.player,dt,(...args)=>this.hit(...args));
+    for(const h of this.hazards){
+      h.wait-=dt;if(h.wait>0)continue;h.life-=dt;
+      if(!h.hit&&this.player.invuln<=0&&Math.abs(this.player.x-h.x)<h.r+this.player.w/2&&this.player.y>500){
+        h.hit=true;this.player.hp=Math.max(0,this.player.hp-h.damage);this.player.invuln=.4;this.player.stun=.25;this.player.attack=null;SR.breakCombo(this.player);this.hit(this.player,h.damage,1);
+      }
+    }
+    this.hazards=this.hazards.filter(h=>h.wait>0||h.life>0);
+    const dead=this.enemies.filter(e=>e.hp<=0);this.kills+=dead.length;this.enemies=this.enemies.filter(e=>e.hp>0);
+    this.enemy=this.enemies.find(e=>e.boss)||this.enemies.reduce((best,e)=>!best||Math.abs(e.x-this.player.x)<Math.abs(best.x-this.player.x)?e:best,null)||{...this.enemy,hp:0};
+    if(this.player.hp<=0){this.finish(false);return;}
+    if(this.enemies.length===0){
+      if(this.wave===this.stage.waves.length-1){this.finish(true);return;}
+      this.waveDelay+=dt;
+      if(this.waveDelay>=1.8){this.wave++;this.waveDelay=0;this.hazards=[];this.player.hp=Math.min(this.player.maxHp,this.player.hp+20);this.player.energy=Math.min(this.player.maxEnergy,this.player.energy+25);this.enemies=SR.spawnWave(this.stage,this.wave,this.player);}
+    }
+    for(const p of this.particles){p.life-=dt;p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=500*dt;}this.particles=this.particles.filter(p=>p.life>0);
+    for(const n of this.numbers){n.life-=dt;n.y-=48*dt;}this.numbers=this.numbers.filter(n=>n.life>0);this.shake=Math.max(0,this.shake-dt*4);
+    const target=Math.max(0,Math.min(SR.ARENA.width-1280,this.player.x-480));this.camera+=(target-this.camera)*(1-Math.exp(-8*dt));
+  }
+  frame(time){
+    const dt=Math.min(.1,(time-(this.last||time))/1000);this.last=time;
+    if(this.input.take('Escape')){if(this.state==='playing')this.pause();else if(this.state==='paused')this.resume();else if(this.state!=='menu')this.back();}
+    if(this.state==='playing'){
+      this.accumulator+=dt;while(this.accumulator>=1/120&&this.state==='playing'){this.step(1/120);this.accumulator-=1/120;this.input.endFrame();}this.ui.update();
+    }else{this.input.endFrame();this.accumulator=0;}
+    this.renderer.draw(this);requestAnimationFrame(t=>this.frame(t));
+  }
+};
+globalThis.game=new SR.Game();
+
+</script>
+</body>
+</html>

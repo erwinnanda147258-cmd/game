@@ -1,0 +1,11 @@
+# Local dependencies and Python caches
+node_modules/
+__pycache__/
+*.py[cod]
+
+# Generated release folders (standalone HTML is intentionally tracked)
+exports/
+
+# OS metadata
+.DS_Store
+Thumbs.db

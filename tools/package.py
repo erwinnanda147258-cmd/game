@@ -28,11 +28,11 @@ def build(output):
     standalone = ROOT / (NAME + '.html')
     standalone.write_text(html, encoding='utf-8')
     (output / standalone.name).write_bytes(standalone.read_bytes())
-    paths = [ROOT / p for p in ['index.html', 'style.css', 'README.md', 'RUN-GAME.bat', 'serve.py', standalone.name]]
+    paths = [ROOT / p for p in ['index.html', 'style.css', 'README.md', 'RUN-GAME.bat', 'serve.py', '.gitignore', '.gitattributes', standalone.name]]
     for folder in ['js', 'tests', 'tools']:
         paths.extend(p for p in sorted((ROOT / folder).rglob('*')) if p.is_file() and '__pycache__' not in p.parts)
     contents = {p.relative_to(ROOT).as_posix(): p.read_bytes() for p in paths}
-    manifest = {'version': '1.1 / Reliability update', 'assets': 'Procedural Canvas graphics and Web Audio; no external assets.',
+    manifest = {'version': '2.0 / World and Arsenal', 'assets': 'Procedural Canvas graphics and Web Audio; no external assets.',
                 'sha256': {name: hashlib.sha256(data).hexdigest() for name, data in contents.items()}}
     contents['MANIFEST.json'] = (json.dumps(manifest, indent=2) + '\n').encode()
     archive = output / (NAME + '.zip')

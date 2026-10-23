@@ -11,16 +11,18 @@
 
 #overlay{overflow:auto}.menu{padding:12px 0}.menu.wide{max-width:100%;width:100%}.menu.wide h1{font-size:clamp(26px,3.4vw,48px)}.menu.wide h2{font-size:13px;margin:12px 0 20px}.stage-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.stage-grid button,.upgrade-grid button{text-align:left;letter-spacing:.5px;padding:12px}.stage-grid strong,.upgrade-grid strong{display:block;font-size:11px;margin:8px 0}.stage-grid small{font-size:8px;color:#b29bbf}.stage-grid span,.upgrade-grid span{font-size:9px;color:#9dd7dd}.upgrade-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.settings{display:grid;gap:12px;font-size:13px;color:#cfbddf}.settings label{display:flex;align-items:center;gap:15px}.settings select{background:#281d36;color:#eee;padding:6px}.settings input{accent-color:#bd87e6}button:disabled{opacity:.35;cursor:not-allowed}#save-status,#import-message{color:#ffc18c;font-size:11px}.menu .buttons{gap:8px;margin-top:16px}.menu p{margin:8px 0}.menu .buttons button{padding:12px 16px}.menu.wide p{max-width:650px}@media(max-height:800px){.menu h1{font-size:44px}.menu h2{margin:10px 0;font-size:14px}.menu .eyebrow{margin-bottom:10px}#overlay{padding:4% 6%}.stage-grid button{padding:8px}}@media(max-width:700px){.stage-grid{grid-template-columns:1fr 1fr}.stage-grid small{display:none}.menu h1{font-size:28px}.menu h2{font-size:12px}.menu .buttons button{font-size:8px;padding:8px}.menu .buttons .primary{min-width:0}}
 
+.weapon-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;max-height:42vh;overflow:auto;padding:2px 8px 4px 2px}.weapon-card{border:1px solid #654d75;background:#130f20ed;padding:14px}.weapon-card h3{font:22px Georgia;margin:8px 0;color:#edd9ff}.weapon-card small{font-size:8px;letter-spacing:1px;color:#b39ac5}.weapon-card p{font-size:11px;line-height:1.5;max-width:none}.weapon-card .weapon-stats{color:#a3c9d7;font-size:9px;min-height:28px}.weapon-card>div{display:flex;gap:5px;flex-wrap:wrap;margin-top:10px}.weapon-card button{font-size:8px;padding:8px;letter-spacing:1px}.shop-tabs{display:flex;gap:8px;margin-bottom:10px}.shop-tabs button[aria-pressed=true]{background:#a97bcb;color:#180e22}#shop-message{color:#dfb8f6;min-height:16px}#weapon-status{color:#c4d7ef;font-size:8px}@media(max-width:700px){.weapon-grid{grid-template-columns:1fr;max-height:33vh}.weapon-card{padding:10px}.weapon-card h3{font-size:18px}}
+
 </style>
 </head>
 <body>
-  <header><a class="brand" href="./Shadow-Rift-Last-Eclipse.html">SR<span>SHADOW RIFT</span></a><span class="edition">LAST ECLIPSE <b> / </b> CAMPAIGN 1.1</span><button id="sound" aria-pressed="false">SOUND OFF</button></header>
+  <header><a class="brand" href="./Shadow-Rift-Last-Eclipse.html">SR<span>SHADOW RIFT</span></a><span class="edition">LAST ECLIPSE <b> / </b> WORLD & ARSENAL 2.0</span><button id="sound" aria-pressed="false">SOUND OFF</button></header>
   <main>
     <div class="chapter"><span>01 / THE FALLEN KINGDOM</span><span class="status">● OFFLINE · LOCAL BUILD</span></div>
     <section id="viewport" aria-label="Arena permainan">
-      <canvas id="game" width="1280" height="720" tabindex="0" aria-label="Shadow Rift. A dan D bergerak, W lompat, J serang ringan, K serang berat, L dash, Space block, U dan I skill, O ultimate, Escape pause."></canvas>
+      <canvas id="game" width="1280" height="720" tabindex="0" aria-label="Shadow Rift. A dan D bergerak, W lompat, J serangan utama, K serangan alternatif, R reload, L dash, Space block, U dan I skill, O ultimate, Escape pause."></canvas>
       <div id="hud" hidden>
-        <div class="health player-health"><div><strong>THE WANDERER</strong><span id="player-hp"></span></div><div class="track"><i id="player-bar"></i></div><small>ENERGY <span id="energy-value">100 / 100</span></small><div class="track energy"><i id="energy-bar"></i></div><small id="combo-state">COMBO · J → J → K</small></div>
+        <div class="health player-health"><div><strong>THE WANDERER</strong><span id="player-hp"></span></div><div class="track"><i id="player-bar"></i></div><small>ENERGY <span id="energy-value">100 / 100</span></small><div class="track energy"><i id="energy-bar"></i></div><small id="weapon-status">RUSTBLADE</small><small id="combo-state">COMBO · J → J → K</small></div>
         <div class="objective"><span>ASHEN VILLAGE</span><strong id="objective">Kalahkan penjaga rift</strong></div>
         <div class="health enemy-health"><div><strong>RIFT SENTINEL</strong><span id="enemy-hp"></span></div><div class="track"><i id="enemy-bar"></i></div><small id="enemy-state">GUARDIAN / 01</small></div>
       </div>
@@ -34,10 +36,10 @@
       <div id="overlay">
         <div class="menu" id="menu-content"></div>
       </div>
-      <div class="arena-caption"><span>ASHEN VILLAGE <b>—</b> THE RIFT AWAKENS</span><span>BUILD 1.1</span></div>
+      <div class="arena-caption"><span>ASHEN VILLAGE <b>—</b> THE RIFT AWAKENS</span><span>BUILD 2.0</span></div>
     </section>
-    <footer><div><kbd>A</kbd><kbd>D</kbd><span>MOVE</span><kbd>W</kbd><span>JUMP</span><kbd>J</kbd><span>LIGHT</span><kbd>K</kbd><span>HEAVY</span><kbd>L</kbd><span>DASH</span><kbd>SPACE</kbd><span>BLOCK</span><kbd>U / I / O</kbd><span>SKILLS</span><kbd>ESC</kbd><span>PAUSE</span></div><span>ONE BLADE. ONE LAST DAWN.</span></footer>
-    <p class="note">9 stages · 3 regions · 3 bosses. J → J → K combo · L dash · Space block · U Rift Lance · I unlock setelah stage 2 · O unlock setelah stage 6. Progres disimpan setelah kemenangan dan upgrade.</p>
+    <footer><div><kbd>A</kbd><kbd>D</kbd><span>MOVE</span><kbd>W</kbd><span>JUMP</span><kbd>J</kbd><span>PRIMARY</span><kbd>K</kbd><span>ALT</span><kbd>R</kbd><span>RELOAD</span><kbd>L</kbd><span>DASH</span><kbd>SPACE</kbd><span>BLOCK</span><kbd>U / I / O</kbd><span>SKILLS</span><kbd>ESC</kbd><span>PAUSE</span></div><span>ONE BLADE. ONE LAST DAWN.</span></footer>
+    <p class="note">9 stages · 3 regions · 3 bosses · 12 weapons. Sword J → J → K combo · L dash · Space block · U Rift Lance · I unlock setelah stage 2 · O unlock setelah stage 6. Progres disimpan setelah kemenangan dan upgrade.</p>
   </main>
   <script>
 // Source: js/input.js
@@ -46,7 +48,7 @@ globalThis.SR = globalThis.SR || {};
 SR.Input = class {
   constructor(target = window) {
     this.held = new Set(); this.pressed = new Set();
-    const keys = new Set(['KeyA','KeyD','KeyW','KeyJ','KeyK','KeyL','KeyU','KeyI','KeyO','Escape','Space']);
+    const keys = new Set(['KeyA','KeyD','KeyW','KeyJ','KeyK','KeyL','KeyU','KeyI','KeyO','KeyR','Escape','Space']);
     target.addEventListener('keydown', e => {
       if (!keys.has(e.code) || (e.code !== 'Escape' && /INPUT|TEXTAREA|SELECT/.test(e.target?.tagName))) return;
       if(e.code === 'Space' && e.target?.tagName === 'BUTTON') return;
@@ -86,6 +88,7 @@ SR.spendEnergy = (p, amount) => {
 SR.breakCombo = p => { p.combo = ''; p.comboWindow = 0; p.buffer = null; };
 
 SR.playerAttack = (p, key) => {
+  if(p.weapon&&p.weapon.category!=='Sword')return SR.weaponAttack(p,key);
   const finisher = key === 'K' && p.combo === 'JJ' && p.comboWindow > 0;
   if (!SR.beginAttack(p, finisher ? 'finisher' : key === 'J' ? 'light' : 'heavy')) return false;
   if (finisher) {
@@ -113,6 +116,7 @@ SR.useSkill = (p, type) => {
 };
 
 SR.updatePlayer = (p, input, dt) => {
+  if(SR.updateWeapon)SR.updateWeapon(p,dt,input);
   // Timers belong to simulation time; pause freezes everything, including regen.
   for (const key of ['dashCooldown', 'guardBroken', 'regenDelay', 'comboWindow', 'comboFlash', 'noticeTime']) {
     p[key] = Math.max(0, p[key] - dt);
@@ -158,27 +162,41 @@ SR.updatePlayer = (p, input, dt) => {
 
 </script><script>
 // Source: js/enemies.js
-SR.makeEnemy = () => ({
-  team: 'enemy', x: 1050, y: 570, w: 50, h: 108, vx: 0, vy: 0, face: -1,
-  hp: 180, maxHp: 180, speed: 145, grounded: true, attack: null,
-  cooldown: .7, stun: 0, invuln: 0, flash: 0, walk: 0, attacks: 0, intent: 'CHASE'
-});
-SR.updateEnemy = (e, p, dt, game) => {
-  if (e.hp <= 0 || e.stun > 0) return;
-  e.vx = 0;
-  if (e.attack || p.hp <= 0) return;
-  if(game&&(e.spawnGrace>0||e.x<game.camera+25||e.x>game.camera+1255)){e.vx=(p.x<e.x?-1:1)*e.speed;return;}
-  const distance = Math.abs(p.x - e.x);
-  e.face = p.x < e.x ? -1 : 1;
-  if(e.kind==='caster'&&distance>150&&distance<260&&e.cooldown<=0){e.vx=0;SR.beginAttack(e,'hex');e.intent='HEX';return;}
-  if (e.cooldown > 0 && distance < 155) {
-    e.vx = -e.face * e.speed * .65; e.intent = 'REPOSITION';
-  } else if (distance > 110) {
-    e.vx = e.face * e.speed; e.intent = 'CHASE';
-  } else if (e.cooldown <= 0 && Math.abs(p.y - e.y) < 135) {
-    const type = e.attacks % 3 === 2 ? 'enemyHeavy' : 'enemy';
-    if (SR.beginAttack(e, type)) { e.attacks++; e.intent = type === 'enemyHeavy' ? 'GUARD BREAK' : 'STRIKE'; }
-  } else e.intent = 'WAIT';
+SR.enemyTypes={
+ scout:{name:'Shadow Stalker',hp:45,speed:180,range:105,rest:.7,coins:12,xp:8,color:'#db829f'},
+ guard:{name:'Rift Sentinel',hp:80,speed:110,range:130,rest:.9,coins:20,xp:14,color:'#cc8192'},
+ caster:{name:'Hex Weaver',hp:55,speed:120,range:340,rest:1.3,coins:22,xp:16,color:'#bc86ee'},
+ archer:{name:'Dread Archer',hp:50,speed:140,range:450,rest:1.5,coins:20,xp:14,color:'#e0b57f'},
+ assassin:{name:'Void Assassin',hp:65,speed:190,range:110,rest:.8,coins:25,xp:18,color:'#89b9e9'},
+ brute:{name:'Abyss Brute',hp:125,speed:85,range:165,rest:1.2,coins:40,xp:28,color:'#f2a16b'}
+};
+SR.makeEnemy = () => ({team:'enemy',x:1050,y:570,w:50,h:108,vx:0,vy:0,face:-1,hp:180,maxHp:180,speed:145,grounded:true,attack:null,cooldown:.7,stun:0,invuln:0,flash:0,walk:0,attacks:0,intent:'APPROACH',guardLock:0,slow:0,flankCooldown:0});
+SR.updateEnemy = (e,p,dt,game) => {
+  e.guarding=false;e.guardLock=Math.max(0,(e.guardLock||0)-dt);e.flankCooldown=Math.max(0,(e.flankCooldown||0)-dt);
+  if(e.hp<=0){e.intent='DEATH';return;}if(e.stun>0){e.intent='STUN';return;}
+  e.vx=0;if(p.hp<=0){e.intent='IDLE';return;}
+  if(e.attack){e.intent=e.attack.time<e.attack.windup?'WINDUP':e.attack.time<e.attack.windup+e.attack.active?'ATTACK':'RECOVERY';
+    if(e.attack.type==='lunge'&&e.intent==='ATTACK')e.vx=e.face*370;
+    return;
+  }
+  if(e.dash>0){e.dash=Math.max(0,e.dash-dt);e.vx=e.dashFace*700;e.intent='FLANK';return;}
+  if(e.flankPrep>0){e.flankPrep-=dt;e.intent='FLANK WINDUP';if(e.flankPrep<=0){e.dash=.25;e.dashFace=p.x<e.x?-1:1;e.flankCooldown=4;e.cooldown=.5;}return;}
+  if(game&&(e.spawnGrace>0||e.x<game.camera+25||e.x>game.camera+1255)){e.vx=(p.x<e.x?-1:1)*e.speed;e.intent='APPROACH';return;}
+  e.face=p.x<e.x?-1:1;const d=Math.abs(p.x-e.x),kind=e.kind;
+  if(kind==='assassin'&&e.flankCooldown===0&&d>80&&d<210){e.flankPrep=.45;e.intent='FLANK WINDUP';return;}
+  if(kind==='guard'&&e.guardLock===0&&e.cooldown>0&&d<210)e.guarding=true;
+  if(e.cooldown>0&&d<150){e.vx=-e.face*e.speed*.55;e.intent='RECOVERY';return;}
+  const reach=SR.enemyTypes[kind]?.range||110;
+  if(d>reach){e.vx=e.face*e.speed;e.intent='APPROACH';return;}
+  if(e.cooldown>0){e.intent='IDLE';return;}
+  if(Math.abs(p.y-e.y)>170){e.intent='IDLE';return;}
+  let type=kind==='scout'?'lunge':kind==='brute'?'bruteSmash':e.attacks%3===2?'enemyHeavy':'enemy';
+  if(kind==='archer')type='arrow';if(kind==='caster')type=e.attacks%2?'hexZone':'hexBolt';
+  if(SR.beginAttack(e,type)){
+    e.attacks++;e.intent='WINDUP';
+    if(e.attack.projectile){const dy=p.y-p.h/2-(e.y-65);e.attack.projectile={...e.attack.projectile,angle:Math.atan2(dy,Math.max(1,d))};}
+    if(type==='hexZone'&&game)game.hazards.push({x:p.x,y:570,r:70,wait:1.2,life:.25,damage:12,hit:false});
+  }
 };
 
 </script><script>
@@ -200,10 +218,18 @@ SR.moves = {
   enemyHeavy: {windup: 1.0, active: .20, recovery: .85, damage: 30, range: 155, knock: 390, stun: .5, guardBreak: true}
 };
 Object.assign(SR.moves,{hex:{windup:.85,active:.18,recovery:.7,damage:16,range:280,knock:160,stun:.2},bossSweep:{windup:.9,active:.22,recovery:.8,damage:24,range:210,knock:340,stun:.35,radial:true},bossHex:{windup:1,active:.2,recovery:.6,damage:20,range:200,knock:200,stun:.3}});
+Object.assign(SR.moves,{
+ lunge:{windup:.5,active:.14,recovery:.55,damage:14,range:100,knock:170,stun:.2},
+ bruteSmash:{windup:1.1,active:.2,recovery:.8,damage:27,range:170,knock:380,stun:.4,guardBreak:true},
+ arrow:{windup:.95,active:.1,recovery:.5,damage:13,range:500,knock:100,stun:.15,projectile:{speed:490,range:600,r:3}},
+ hexBolt:{windup:.85,active:.1,recovery:.5,damage:15,range:380,knock:100,stun:.2,projectile:{speed:300,range:500,r:8,blast:45}},
+ hexZone:{windup:1.2,active:.05,recovery:.4,damage:12,range:380,area:true}
+});
 SR.beginAttack = (actor, type) => {
   if (!SR.moves[type] || actor.hp <= 0 || actor.attack || actor.cooldown > 0 || actor.stun > 0 || actor.dash > 0 || actor.blocking) return false;
   actor.attack = {...SR.moves[type], type, time: 0, hit: false, targets: new Set()};
   actor.attack.damage=Math.round(actor.attack.damage*(actor.damageScale||1));
+  if(actor.team==='player'&&['light','heavy','finisher'].includes(type)&&SR.modifySwordAttack)SR.modifySwordAttack(actor,actor.attack);
   actor.vx = 0;
   return true;
 };
@@ -211,7 +237,7 @@ SR.tickActor = (a, dt) => {
   for (const key of ['cooldown', 'stun', 'invuln', 'flash']) a[key] = Math.max(0, a[key] - dt);
   if (a.hp <= 0) { a.vx *= Math.exp(-10 * dt); a.attack = null; a.blocking = false; }
   if (a.stun > 0) a.vx *= Math.exp(-5 * dt);
-  a.vy += SR.ARENA.gravity * dt; a.x += a.vx * dt; a.y += a.vy * dt;
+  a.vy += SR.ARENA.gravity * dt; a.slow=Math.max(0,(a.slow||0)-dt); a.x += a.vx * dt*(a.slow>0?.55:1); a.y += a.vy * dt;
   a.x = Math.max(a.w / 2, Math.min(SR.ARENA.width - a.w / 2, a.x));
   a.grounded = a.y >= SR.ARENA.ground;
   if (a.grounded) { a.y = SR.ARENA.ground; a.vy = 0; }
@@ -222,16 +248,7 @@ SR.attackBox = a => ({
   right: a.attack.radial || a.face > 0 ? a.x + a.attack.range : a.x,
   top: a.y - a.h - (a.attack.radial ? 45 : 12), bottom: a.y - 18
 });
-SR.resolveAttack = (a, targets, dt, onHit = () => {}) => {
-  const victims=Array.isArray(targets)?targets:[targets];
-  const attack = a.attack;
-  if (!attack) return;
-  attack.time += dt;
-  for(const b of victims){
-  if (attack.time >= attack.windup && attack.time < attack.windup + attack.active && !attack.targets.has(b) && b.hp > 0 && b.invuln <= 0) {
-    const box = SR.attackBox(a);
-    if (box.right > b.x - b.w / 2 && box.left < b.x + b.w / 2 && box.bottom > b.y - b.h && box.top < b.y) {
-      attack.hit = true;attack.targets.add(b);
+SR.dealHit = (a,b,attack,onHit=()=>{}) => {
       let damage = attack.damage, knock = attack.knock, stun = attack.stun, event = 'hit';
       const facingAttacker = (a.x - b.x) * b.face >= 0;
       if (b.blocking && b.grounded && facingAttacker) {
@@ -243,16 +260,40 @@ SR.resolveAttack = (a, targets, dt, onHit = () => {}) => {
           stun = .7; event = 'break'; SR.notifyPlayer(b, 'GUARD BROKEN');
         }
       }
-      b.hp = Math.max(0, b.hp - damage); b.stun = stun; b.invuln = .24; b.flash = .12;
+      if(b.guarding&&facingAttacker){
+        if(attack.guardBreak||['heavy','finisher'].includes(attack.type)){b.guardLock=1.4;b.guarding=false;}
+        else{damage=Math.max(1,Math.round(damage*.4));knock*=.3;event='block';}
+      }
+      if(b.armor)damage=Math.max(1,Math.round(damage*(1-b.armor)));
+      if(attack.slow)b.slow=Math.max(b.slow||0,attack.slow);
+      b.hp = Math.max(0, b.hp - damage); b.stun = stun; b.invuln = attack.type==='projectile'&&b.team==='enemy' ? .06 : .24; b.flash = .12;
       const direction = attack.radial ? (b.x >= a.x ? 1 : -1) : a.face;
       b.vx = direction * knock*(b.boss?.18:1); b.vy = event === 'block'||b.boss ? 0 : -110; if(!b.boss)b.attack = null;else b.stun=0;
       if (b.team === 'player') { SR.breakCombo(b); b.dash = 0; }
       onHit(b, damage, direction, event);
+};
+SR.resolveAttack = (a, targets, dt, onHit = () => {}, game) => {
+  const victims=Array.isArray(targets)?targets:[targets];
+  const attack = a.attack;
+  if (!attack) return;
+  attack.time += dt;
+  if(attack.bonusProjectile&&game&&!attack.bonusFired&&attack.time>=attack.windup){SR.spawnProjectile(game,a,{...attack.bonusProjectile,damage:Math.round(attack.damage*.45)});attack.bonusFired=true;}
+  if(attack.projectile&&game){
+    while((attack.emitted||0)<(attack.burst||1)&&attack.time>=attack.windup+(attack.emitted||0)*.08){
+      SR.spawnProjectile(game,a,{...attack.projectile,damage:attack.damage});attack.emitted=(attack.emitted||0)+1;
+    }
+  }
+  for(const b of attack.projectile||attack.area?[]:victims){
+  if (attack.time >= attack.windup && attack.time < attack.windup + attack.active && !attack.targets.has(b) && b.hp > 0 && b.invuln <= 0) {
+    const box = SR.attackBox(a);
+    if (box.right > b.x - b.w / 2 && box.left < b.x + b.w / 2 && box.bottom > b.y - b.h && box.top < b.y) {
+      attack.hit = true;attack.targets.add(b);
+      SR.dealHit(a,b,attack,onHit);
     }
   }
   }
   if (attack.time >= attack.windup + attack.active + attack.recovery) {
-    a.attack = null; a.cooldown = a.team === 'enemy' ? .6 : .08;
+    a.attack = null; a.cooldown = a.team === 'enemy' ? (a.rest||.6) : .08;
   }
 };
 SR.separate = (a, b) => {
@@ -269,6 +310,136 @@ SR.separate = (a, b) => {
     const moveLeft=Math.min(remaining,left.x-left.w/2);
     left.x-=moveLeft;right.x+=remaining-moveLeft;
   }
+};
+
+</script><script>
+// Source: js/weapons.js
+// All weapon prices and combat tuning live here. J/K dispatch by equipped class.
+SR.weapons = {
+ rustblade:{name:'Rustblade',category:'Sword',price:0,description:'Balanced steel. Reliable J → J → K finisher.',damage:1,tempo:1,reach:1,color:'#c5a6ed'},
+ nightfang:{name:'Nightfang',category:'Sword',price:250,description:'Short recovery and quick close-range chains.',damage:.88,tempo:.72,reach:.9,color:'#93deca'},
+ great_riftblade:{name:'Great Riftblade',category:'Sword',price:500,description:'Slower swings; broad reach and heavy impact.',damage:1.35,tempo:1.3,reach:1.38,color:'#cca5ed'},
+ eclipse_edge:{name:'Eclipse Edge',category:'Sword',price:1000,description:'Heavy attacks and finishers release an energy slash.',damage:1.08,tempo:1.05,reach:1.12,slash:true,color:'#e6c9ff'},
+ rift_pistol:{name:'Rift Pistol',category:'Gun',price:300,description:'Quick single shots. K fires a stronger double-cost shot.',damage:18,tempo:.42,range:680,speed:850,capacity:8,reload:1.3,burst:1,color:'#e8c997'},
+ twin_handcannons:{name:'Twin Handcannons',category:'Gun',price:600,description:'Two-shot bursts; K sends three rounds.',damage:13,tempo:.6,range:610,speed:760,capacity:12,reload:1.65,burst:2,color:'#f4be8f'},
+ void_rifle:{name:'Void Rifle',category:'Gun',price:850,description:'Fast precision rounds penetrate up to three enemies.',damage:27,tempo:.75,range:850,speed:1200,capacity:6,reload:1.8,burst:1,pierce:3,color:'#9ed8ec'},
+ eclipse_cannon:{name:'Eclipse Cannon',category:'Gun',price:1200,description:'Slow explosive rounds; K breaks guard in a wider blast.',damage:42,tempo:1.15,range:650,speed:450,capacity:4,reload:2.1,burst:1,blast:85,color:'#ffa4bd'},
+ apprentice_focus:{name:'Apprentice Focus',category:'Magic',price:350,description:'Efficient arcane bolts; K pierces a second enemy.',damage:22,tempo:.55,range:600,speed:560,cost:8,color:'#ae9cfa'},
+ storm_staff:{name:'Storm Staff',category:'Magic',price:650,description:'Lightning chains from impact to two nearby targets.',damage:24,tempo:.7,range:630,speed:800,cost:12,chain:240,color:'#a9e9ff'},
+ void_grimoire:{name:'Void Grimoire',category:'Magic',price:900,description:'Area blasts slow enemies; K expands the curse.',damage:21,tempo:.8,range:590,speed:430,cost:13,blast:90,slow:2,color:'#c296ff'},
+ astral_catalyst:{name:'Astral Catalyst',category:'Magic',price:1300,description:'Powerful piercing stars with a high energy cost.',damage:43,tempo:1.0,range:720,speed:650,cost:23,pierce:2,blast:60,color:'#ffdbf6'}
+};
+SR.weaponUpgradeRules={max:5,baseCost:60,costStep:65,priceFactor:.1,damagePerLevel:.08,speedPerLevel:.025,energyPerLevel:.05};
+SR.weaponStats = (id,level=0) => {
+  const w=SR.weapons[id];if(!w)return null;const u=SR.weaponUpgradeRules;
+  return {...w,id,level,damage:w.damage*(1+u.damagePerLevel*level),tempo:w.tempo*(1-u.speedPerLevel*level),
+    cost:w.cost?Math.max(1,Math.ceil(w.cost*(1-u.energyPerLevel*level))):0,capacity:w.capacity?w.capacity+level:0};
+};
+SR.setWeapon = (p,progress) => {
+  p.weaponId=progress.equippedWeapon;p.weaponLevel=progress.weaponLevels[p.weaponId];p.weapon=SR.weaponStats(p.weaponId,p.weaponLevel);
+  p.magazines ||= {};
+  if(p.weapon.category==='Gun')p.magazines[p.weaponId] ||= {ammo:p.weapon.capacity,reload:0};
+  p.buffer=null;SR.breakCombo(p);
+};
+SR.beginReload = p => {
+  if(p.weapon?.category!=='Gun'||p.attack||p.dash>0)return false;
+  const magazine=p.magazines[p.weaponId];if(magazine.reload>0||magazine.ammo>=p.weapon.capacity)return false;
+  magazine.reload=p.weapon.reload;SR.notifyPlayer(p,'RELOADING');return true;
+};
+SR.updateWeapon = (p,dt,input) => {
+  if(p.hp<=0||!p.weapon)return;
+  // Reload runs only for the active weapon: changing equipment is not a refill exploit.
+  if(p.weapon.category==='Gun'){
+    const magazine=p.magazines[p.weaponId];
+    if(magazine.reload>0){magazine.reload=Math.max(0,magazine.reload-dt);if(magazine.reload===0)magazine.ammo=p.weapon.capacity;}
+    else if(magazine.ammo===0&&!p.attack)SR.beginReload(p);
+    if(input.take('KeyR'))SR.beginReload(p);
+  }
+};
+SR.modifySwordAttack = (p,attack) => {
+  if(p.weapon?.category!=='Sword')return;
+  const w=p.weapon;attack.damage=Math.round(attack.damage*w.damage);attack.windup*=w.tempo;attack.active*=w.tempo;attack.recovery*=w.tempo;attack.range*=w.reach;
+  if(w.slash&&['heavy','finisher'].includes(attack.type))attack.bonusProjectile={speed:700,range:420,r:10,pierce:2};
+};
+SR.weaponAttack = (p,key) => {
+  if(p.hp<=0||p.attack||p.cooldown>0||p.stun>0||p.dash>0||p.blocking)return false;
+  const w=p.weapon,heavy=key==='K',burst=w.id==='twin_handcannons'?(heavy?3:2):1;
+  const rounds=w.category==='Gun'?(w.id==='twin_handcannons'?burst:heavy?2:1):0,cost=Math.ceil(w.cost*(heavy?1.8:1));
+  if(w.category==='Gun'){
+    const mag=p.magazines[p.weaponId];if(mag.reload>0){SR.notifyPlayer(p,'RELOADING');return false;}
+    if(mag.ammo<rounds){SR.beginReload(p);return false;}mag.ammo-=rounds;
+  }else if(!SR.spendEnergy(p,cost))return false;
+  SR.beginAttack(p,'weaponShot');
+  p.attack.damage=Math.round(w.damage*(p.damageScale||1)*(heavy?1.65:1));
+  p.attack.windup=heavy?.18:.08;p.attack.active=.1+(burst-1)*.08;p.attack.recovery=w.tempo*(heavy?1.2:1);p.attack.range=w.range;p.attack.burst=burst;
+  p.attack.projectile={speed:w.speed,range:w.range,r:w.category==='Magic'?8:4,color:w.color,pierce:heavy&&w.id==='apprentice_focus'?2:w.pierce||1,
+    blast:w.blast?(heavy?w.blast*1.4:w.blast):0,chain:w.chain?(heavy?340:w.chain):0,slow:w.slow?(heavy?3:w.slow):0,guardBreak:heavy};
+  SR.breakCombo(p);return true;
+};
+SR.moves.weaponShot={windup:.08,active:.1,recovery:.3,damage:20,range:650,knock:120,stun:.2};
+
+</script><script>
+// Source: js/shop.js
+SR.weaponUpgradeCost = (p,id) => Math.round(SR.weaponUpgradeRules.baseCost+SR.weapons[id].price*SR.weaponUpgradeRules.priceFactor+(p.weaponLevels[id]||0)*SR.weaponUpgradeRules.costStep);
+SR.buyWeapon = (p,id) => {
+  const w=Object.hasOwn(SR.weapons,id)?SR.weapons[id]:null;
+  if(!w)return {ok:false,message:'Senjata tidak ditemukan.'};
+  if(p.ownedWeapons.includes(id))return {ok:false,message:'Senjata sudah dimiliki.'};
+  if(p.coins<w.price)return {ok:false,message:'Koin tidak cukup.'};
+  p.coins-=w.price;p.ownedWeapons.push(id);p.weaponLevels[id]=0;return {ok:true,message:w.name+' dibeli.'};
+};
+SR.weaponBusy = p => !!p&&(!!p.attack||p.dash>0||p.stun>0||p.cooldown>0||(p.weapon?.category==='Gun'&&p.magazines[p.weaponId].reload>0));
+SR.equipWeapon = (progress,id,player=null) => {
+  if(!progress.ownedWeapons.includes(id)||!Object.hasOwn(SR.weapons,id))return {ok:false,message:'Beli senjata terlebih dahulu.'};
+  if(SR.weaponBusy(player))return {ok:false,message:'Lanjutkan pertarungan sampai serangan/reload selesai sebelum equip.'};
+  progress.equippedWeapon=id;if(player)SR.setWeapon(player,progress);return {ok:true,message:SR.weapons[id].name+' equipped.'};
+};
+SR.upgradeWeapon = (p,id,player=null) => {
+  if(!p.ownedWeapons.includes(id)||!Object.hasOwn(SR.weapons,id))return {ok:false,message:'Senjata belum dimiliki.'};
+  if(p.weaponLevels[id]>=SR.weaponUpgradeRules.max)return {ok:false,message:'Level maksimum tercapai.'};
+  if(player&&id===p.equippedWeapon&&SR.weaponBusy(player))return {ok:false,message:'Selesaikan aksi aktif sebelum upgrade.'};
+  const cost=SR.weaponUpgradeCost(p,id);if(p.coins<cost)return {ok:false,message:'Koin tidak cukup.'};
+  p.coins-=cost;p.weaponLevels[id]++;if(player&&id===p.equippedWeapon)SR.setWeapon(player,p);
+  return {ok:true,message:SR.weapons[id].name+' naik ke level '+p.weaponLevels[id]+'.'};
+};
+
+</script><script>
+// Source: js/projectiles.js
+SR.segmentHit = (x0,y0,x1,y1,b,r=0) => {
+  let enter=0,exit=1;
+  for(const [start,delta,min,max] of [[x0,x1-x0,b.x-b.w/2-r,b.x+b.w/2+r],[y0,y1-y0,b.y-b.h-r,b.y+r]]){
+    if(Math.abs(delta)<1e-8){if(start<min||start>max)return null;continue;}
+    const a=(min-start)/delta,z=(max-start)/delta;enter=Math.max(enter,Math.min(a,z));exit=Math.min(exit,Math.max(a,z));if(enter>exit)return null;
+  }
+  return enter;
+};
+SR.spawnProjectile = (game,actor,config) => {
+  if(!game||game.projectiles.length>=80)return;
+  const direction=actor.face,angle=config.angle||0,speed=config.speed||650;
+  game.projectiles.push({x:actor.x+direction*25,y:actor.y-65,vx:Math.cos(angle)*speed*direction,vy:Math.sin(angle)*speed,
+    team:actor.team,source:actor,life:3,travel:0,targets:new Set(),pierce:config.pierce||1,r:config.r||5,
+    range:config.range||650,color:actor.team==='enemy'?'#ffad87':'#c8aeff',...config});
+};
+SR.updateProjectiles = (game,dt) => {
+  for(const shot of game.projectiles){
+    const targets=shot.team==='player'?game.enemies:[game.player];
+    const x0=shot.x,y0=shot.y,remaining=Math.max(0,shot.range-shot.travel),speed=Math.hypot(shot.vx,shot.vy);
+    const step=Math.min(dt,remaining/speed);shot.x=Math.max(0,Math.min(SR.ARENA.width,x0+shot.vx*step));shot.y+=shot.vy*step;shot.travel+=speed*step;shot.life-=dt;
+    const collisions=targets.filter(t=>t.hp>0&&!shot.targets.has(t)).map(t=>({t,at:SR.segmentHit(x0,y0,shot.x,shot.y,t,shot.r)})).filter(v=>v.at!==null).sort((a,b)=>a.at-b.at);
+    for(const {t,at} of collisions){
+      shot.targets.add(t);
+      const impactX=x0+(shot.x-x0)*at,impactY=y0+(shot.y-y0)*at;
+      const affected=shot.blast?targets.filter(b=>b.hp>0&&Math.abs(b.x-impactX)<shot.blast+b.w/2&&Math.abs(b.y-b.h/2-impactY)<shot.blast):[t];
+      for(const victim of affected)if(victim.invuln<=0)SR.dealHit({x:x0,face:shot.vx<0?-1:1},victim,{damage:shot.damage,knock:shot.knock||120,stun:shot.stun||.18,guardBreak:shot.guardBreak,slow:shot.slow,type:'projectile'},(...args)=>game.hit(...args));
+      if(shot.chain){const others=targets.filter(b=>b!==t&&b.hp>0&&!shot.targets.has(b)&&Math.abs(b.x-t.x)<shot.chain);for(const other of others.slice(0,2)){shot.targets.add(other);if(other.invuln<=0)SR.dealHit({x:t.x,face:other.x<t.x?-1:1},other,{damage:Math.round(shot.damage*.7),knock:90,stun:.25,type:'projectile'},(...args)=>game.hit(...args));game.beams.push({x:t.x,y:t.y-60,x2:other.x,y2:other.y-60,life:.18});}}
+      if(shot.blast)game.blasts.push({x:impactX,y:impactY,r:shot.blast,life:.25});
+      if(--shot.pierce<=0){shot.life=0;break;}
+    }
+    if(shot.x<=0||shot.x>=SR.ARENA.width||shot.travel>=shot.range||shot.y<0||shot.y>720)shot.life=0;
+  }
+  game.projectiles=game.projectiles.filter(p=>p.life>0);
+  for(const group of [game.beams,game.blasts]){for(const p of group)p.life-=dt;}
+  game.beams=game.beams.filter(p=>p.life>0);game.blasts=game.blasts.filter(p=>p.life>0);
 };
 
 </script><script>
@@ -429,6 +600,9 @@ SR.Renderer = class {
     c.save();c.translate(-g.camera,0);
     c.save();if(g.shake>0)c.translate(Math.sin(t*113)*g.shake*10,Math.cos(t*89)*g.shake*7);
     for(const h of g.hazards||[]){c.fillStyle=h.wait>0?'#ff3e5a44':'#ff436caa';c.strokeStyle='#ff839b';c.lineWidth=3;c.beginPath();c.ellipse(h.x,565,h.r,12,0,0,Math.PI*2);c.fill();c.stroke();c.font='bold 15px Arial';c.textAlign='center';c.fillStyle='#ffd2db';c.fillText(h.wait>0?'DODGE':'RIFT',h.x,535);if(h.wait<=0){c.fillStyle='#ff3e5a77';c.fillRect(h.x-h.r,460,h.r*2,110);}}
+    for(const p of g.projectiles||[]){c.fillStyle=p.color;c.beginPath();c.arc(p.x,p.y,p.r,0,Math.PI*2);c.fill();c.strokeStyle=p.color;c.lineWidth=2;c.beginPath();c.moveTo(p.x,p.y);c.lineTo(p.x-Math.sign(p.vx)*18,p.y);c.stroke();}
+    for(const b of g.beams||[]){c.strokeStyle='#bce8ff';c.lineWidth=3;c.beginPath();c.moveTo(b.x,b.y);c.lineTo((b.x+b.x2)/2,b.y-15);c.lineTo(b.x2,b.y2);c.stroke();}
+    for(const b of g.blasts||[]){c.strokeStyle='#c397ff';c.lineWidth=5;c.beginPath();c.arc(b.x,b.y,b.r*(1-b.life*.5),0,Math.PI*2);c.stroke();}
     for(const e of g.enemies||[g.enemy])this.actor(e,t);this.actor(g.player,t);
     for(const p of g.particles){c.globalAlpha=Math.max(0,p.life/p.max);c.fillStyle=p.color;c.fillRect(p.x,p.y,p.size,p.size);}c.globalAlpha=1;
     for(const n of g.numbers){c.globalAlpha=Math.min(1,n.life*2);c.fillStyle=n.color;c.font='bold 26px Georgia';c.textAlign='center';c.fillText(n.text,n.x,n.y);}c.globalAlpha=1;
@@ -437,7 +611,7 @@ SR.Renderer = class {
     if(g.transition>0&&g.state==='playing'){c.save();c.globalAlpha=Math.min(1,g.transition);c.textAlign='center';c.fillStyle='#e9d7ff';c.font='24px Georgia';c.fillText(g.transitionTitle,640,155);c.font='10px Arial';c.fillText('SHADOW RIFT · '+SR.regions[g.stage.region].toUpperCase(),640,178);c.restore();}
   }
   actor(a,t){
-    const c=this.ctx,enemy=a.team==='enemy',color=enemy?'#ec708a':'#c99aff';
+    const c=this.ctx,enemy=a.team==='enemy',color=enemy?(a.tint||'#ec708a'):'#c99aff';
     c.save();c.translate(a.x,a.y);c.fillStyle='#05040888';c.beginPath();c.ellipse(0,2,40,9,0,0,Math.PI*2);c.fill();
     if(a.hp<=0){c.globalAlpha=.45;c.translate(0,-12);c.rotate(a.face*1.35);}
     if (a.dash > 0) {
@@ -447,8 +621,14 @@ SR.Renderer = class {
       }
     }
     if(enemy&&a.hp>0){c.fillStyle='#08060c';c.fillRect(-30,-a.h-38,60,4);c.fillStyle=a.boss?'#ff6a89':'#b46988';c.fillRect(-30,-a.h-38,60*a.hp/a.maxHp,4);}
-    if(a.boss){c.strokeStyle='#ff8499';c.lineWidth=3;c.beginPath();c.moveTo(-15,-a.h);c.lineTo(-22,-a.h-23);c.lineTo(0,-a.h-12);c.lineTo(22,-a.h-23);c.lineTo(15,-a.h);c.stroke();}
+    if(a.boss){c.strokeStyle=['#ffb381','#9dbeff','#dfa6ff'][a.bossRegion];c.save();c.globalAlpha=.4;c.lineWidth=2;for(let ring=0;ring<a.phase;ring++){c.beginPath();c.ellipse(0,-a.h/2,42+ring*8,66+ring*7,Math.sin(t)*.1,0,Math.PI*2);c.stroke();}c.restore();c.lineWidth=3;c.beginPath();c.moveTo(-15,-a.h);c.lineTo(-22,-a.h-23);c.lineTo(0,-a.h-12);c.lineTo(22,-a.h-23);c.lineTo(15,-a.h);c.stroke();}
     c.scale(a.face,1);
+    if(a.guarding){c.strokeStyle='#f3c8ac';c.lineWidth=5;c.strokeRect(18,-85,12,70);}
+    if(a.kind==='archer'){c.strokeStyle=color;c.lineWidth=3;c.beginPath();c.ellipse(22,-62,19,36,0,-1.3,1.3);c.stroke();}
+    if(a.kind==='caster'){c.strokeStyle=color;c.lineWidth=3;c.beginPath();c.moveTo(25,-10);c.lineTo(25,-105);c.stroke();c.beginPath();c.arc(25,-111,10,0,Math.PI*2);c.stroke();}
+    if(a.kind==='brute'){c.fillStyle='#65516a';c.fillRect(-24,-85,48,25);}
+    if(a.flankPrep>0){c.fillStyle=color;c.font='bold 13px Arial';c.textAlign='center';c.fillText('DASH',0,-a.h-20);}
+
     if (a.blocking) {
       c.strokeStyle = '#8cdeff'; c.lineWidth = 4; c.shadowColor = '#6bccff'; c.shadowBlur = 16;
       c.beginPath(); c.ellipse(15, -52, 35, 55, 0, -1.4, 1.4); c.stroke(); c.shadowBlur = 0;
@@ -463,10 +643,18 @@ SR.Renderer = class {
     c.fillStyle=color;c.shadowColor=color;c.shadowBlur=10;c.fillRect(5,-a.h+14,10,3);c.shadowBlur=0;
     c.fillStyle=enemy?'#8f334e':'#7951a1';c.fillRect(-15,-48,32,5);
     const atk=a.attack,active=atk&&atk.time>=atk.windup&&atk.time<atk.windup+atk.active;
+    if(!enemy&&a.weapon?.category==='Gun'){
+      c.fillStyle='#3d354e';c.fillRect(8,-71,40,11);c.fillStyle=a.weapon.color;c.fillRect(37,-70,15,5);c.fillStyle='#171223';c.fillRect(16,-61,10,15);
+    }else if(!enemy&&a.weapon?.category==='Magic'){
+      c.strokeStyle=a.weapon.color;c.lineWidth=3;c.beginPath();c.moveTo(22,-12);c.lineTo(22,-103);c.stroke();c.beginPath();c.arc(22,-111,11+Math.sin(t*3)*2,0,Math.PI*2);c.stroke();
+    }else{
     c.save();c.translate(8,-64);c.rotate(active?-.8:atk?-1.9:.55);c.strokeStyle='#14111f';c.lineWidth=10;c.beginPath();c.moveTo(0,0);c.lineTo(28,12);c.stroke();c.strokeStyle='#8b729a';c.lineWidth=5;c.beginPath();c.moveTo(28,25);c.lineTo(28,-35);c.stroke();c.strokeStyle=color;c.lineWidth=2;c.beginPath();c.moveTo(31,12);c.lineTo(31,-43);c.stroke();c.restore();
+    }
+
+    if(atk?.projectile&&atk.time<atk.windup){c.save();c.strokeStyle=enemy?'#ffb88399':'#c4b0ff88';c.setLineDash([8,8]);c.lineWidth=2;c.beginPath();c.moveTo(25,-65);c.lineTo(atk.range,-65+Math.sin(atk.projectile.angle||0)*atk.range);c.stroke();c.restore();}
     if(atk){
       if(atk.time<atk.windup){c.strokeStyle=enemy?'#ff496d':'#caa0ff';c.globalAlpha=.4+.5*atk.time/atk.windup;c.lineWidth=3;c.beginPath();c.ellipse(atk.radial?0:atk.range/2,-3,atk.radial?atk.range:atk.range/2,8,0,0,Math.PI*2);c.stroke();c.globalAlpha=1;if(enemy){c.fillStyle='#ff8296';c.font='bold 26px Arial';c.textAlign='center';c.fillText(atk.guardBreak?'BREAK':'!',0,-a.h-18);}}
-      if(active){c.strokeStyle=color;c.shadowColor=color;c.shadowBlur=18;c.lineWidth=['heavy','finisher','eclipse'].includes(atk.type)?13:7;c.beginPath();c.ellipse(atk.radial?0:12,-58,atk.radial?atk.range:atk.range-12,atk.radial?100:62,0,atk.radial?0:-1.3,atk.radial?Math.PI*2:1.2);c.stroke();c.shadowBlur=0;}
+      if(active&&!atk.projectile&&!atk.area){c.strokeStyle=color;c.shadowColor=color;c.shadowBlur=18;c.lineWidth=['heavy','finisher','eclipse'].includes(atk.type)?13:7;c.beginPath();c.ellipse(atk.radial?0:12,-58,atk.radial?atk.range:atk.range-12,atk.radial?100:62,0,atk.radial?0:-1.3,atk.radial?Math.PI*2:1.2);c.stroke();c.shadowBlur=0;}
     }
     c.restore();
   }
@@ -484,14 +672,14 @@ SR.UI = class {
     const g=this.game,p=g.progress;g.state=state;g.audio.setSuspended(state!=='playing');
     this.overlay.hidden=state==='playing';document.getElementById('hud').hidden=!['playing','paused','victory','defeat'].includes(state);document.getElementById('ability-hud').hidden=state!=='playing';
     if(state==='playing')return;
-    this.menu.classList.toggle('wide', ['stages','upgrades','settings'].includes(state));
+    this.menu.classList.toggle('wide', ['stages','upgrades','settings','arsenal'].includes(state));
     let title='SHADOW RIFT',sub='LAST ECLIPSE',body='',buttons=[];
     const add=(label,fn,id,disabled=false)=>buttons.push({label,fn,id,disabled});
     if(state==='menu'){
       body=`<p>Sembilan rift. Tiga kerajaan yang runtuh. Satu kesempatan terakhir.</p><p>LEVEL ${SR.level(p)} · ${p.xp} XP · ${p.coins} COINS · ${p.completed.length}/9 STAGES</p>`;
       if(g.activeRun)add('RESUME BATTLE',()=>g.resume(),'primary');else if(p.started)add('CONTINUE',()=>g.start(p.unlocked),'primary');
       add('NEW GAME',()=>p.started?this.screen('confirm'):g.newGame(),p.started?'new-game':'primary');
-      add('STAGE SELECT',()=>this.screen('stages'),'stages');add('UPGRADE',()=>this.screen('upgrades'),'upgrades');add('SETTINGS',()=>g.openSettings(),'settings');add('EXIT',()=>this.screen('exit'),'exit');
+      add('STAGE SELECT',()=>this.screen('stages'),'stages');add('UPGRADE',()=>this.screen('upgrades'),'upgrades');add('ARSENAL',()=>g.openArsenal(),'arsenal');add('SETTINGS',()=>g.openSettings(),'settings');add('EXIT',()=>this.screen('exit'),'exit');
     }else if(state==='confirm'){
       title='NEW JOURNEY';sub='RESET PROGRESS?';body='<p>New Game menghapus progres dan upgrade saat ini. Export save melalui Settings jika ingin menyimpannya.</p>';
       add('RESET & START',()=>g.newGame(),'primary');
@@ -501,27 +689,45 @@ SR.UI = class {
       title='SHADOW FORGE';sub=`LEVEL ${SR.level(p)} · ${p.coins} COINS`;
       const names={hp:'Vitality · +20 HP',damage:'Blade · +12% damage',energy:'Spirit · +15 energy',cooldown:'Focus · −8% skill cooldown'};
       body='<div class="upgrade-grid">'+Object.keys(p.upgrades).map(key=>`<button data-upgrade="${key}" ${p.upgrades[key]>=5||p.coins<SR.upgradeCost(p,key)?'disabled':''}><strong>${names[key]}</strong><span>${p.upgrades[key]}/5 · ${p.upgrades[key]===5?'MAX':SR.upgradeCost(p,key)+' COINS'}</span></button>`).join('')+'</div><p>Upgrade berlaku pada pertarungan berikutnya. Level naik setiap 250 XP: +4 HP dan +2,5% damage.</p>';
+    }else if(state==='arsenal'){
+      title='THE ARSENAL';sub=`${p.coins} COINS · ${SR.weapons[p.equippedWeapon].name.toUpperCase()}`;
+      const category=this.shopCategory||'Sword';
+      body=`<div class="shop-tabs">${['Sword','Gun','Magic'].map(c=>`<button data-category="${c}" aria-pressed="${category===c}">${c}</button>`).join('')}</div><p>J utama · K alternatif · Gun: R atau otomatis untuk reload. Skill U/I/O tetap tersedia. Equip saat aksi/reload sudah selesai.</p><p id="shop-message"></p><div class="weapon-grid">`;
+      for(const [id,base] of Object.entries(SR.weapons).filter(([,w])=>w.category===category)){
+        const owned=p.ownedWeapons.includes(id),level=p.weaponLevels[id]||0,w=SR.weaponStats(id,level),equipped=p.equippedWeapon===id;
+        const stats=w.category==='Sword'?`J ${Math.round(15*w.damage)} / K ${Math.round(32*w.damage)} DMG · REACH ${Math.round(100*w.reach)} · TEMPO ×${w.tempo.toFixed(2)}`:`J ${Math.round(w.damage)} DMG · RANGE ${w.range} · ${w.category==='Gun'?w.capacity+' ROUNDS · '+w.reload+'s RELOAD':w.cost+' ENERGY'} · ${w.tempo.toFixed(2)}s RECOVERY`;
+        body+=`<article class="weapon-card"><small>${w.category.toUpperCase()} · ${equipped?'EQUIPPED':owned?'OWNED':w.price+' COINS'}</small><h3>${w.name}</h3><p>${w.description}</p><p class="weapon-stats">${stats}</p><small>LEVEL ${level}/5 · BASE STATS</small><div><button data-buy="${id}" ${owned||p.coins<w.price?'disabled':''}>${owned?'OWNED':'BUY · '+w.price}</button><button data-equip="${id}" ${!owned||equipped?'disabled':''}>EQUIP</button><button data-weapon-upgrade="${id}" ${!owned||level>=5||p.coins<SR.weaponUpgradeCost(p,id)?'disabled':''}>${level>=5?'MAX': 'UPGRADE · '+SR.weaponUpgradeCost(p,id)}</button></div></article>`;
+      }
+      body+='</div>';
     }else if(state==='settings'){
       title='SETTINGS';sub='OFFLINE · YOUR WAY';
       body=`<div class="settings"><label>Volume <input id="volume" type="range" min="0" max="100" value="${p.settings.volume*100}"></label><label><input id="music" type="checkbox" ${p.settings.music?'checked':''}> Musik procedural</label><label><input id="shake" type="checkbox" ${p.settings.shake?'checked':''}> Screen shake</label><label>Kualitas efek <select id="effects"><option value="high" ${p.settings.effects==='high'?'selected':''}>High</option><option value="low" ${p.settings.effects==='low'?'selected':''}>Low</option></select></label></div><p>Save otomatis tersimpan pada browser ini. Export/Import untuk pindah perangkat atau versi HTML/server. Import mengganti progres saat ini dan mengakhiri pertarungan yang masih aktif.</p><input id="import-file" type="file" accept="application/json,.json" hidden><p id="import-message"></p>`;
       add('EXPORT SAVE',()=>this.exportSave(),'export-save');add('IMPORT SAVE',()=>document.getElementById('import-file').click(),'import-save');
     }else if(state==='paused'){
-      title='PAUSED';sub='TAKE A BREATH';body='<p>Pertarungan, energi, dan cooldown dijeda.</p>';add('LANJUTKAN',()=>g.resume(),'primary');add('RETRY',()=>g.start(),'retry');add('SETTINGS',()=>g.openSettings(),'settings');
+      title='PAUSED';sub='TAKE A BREATH';body='<p>Pertarungan, energi, dan cooldown dijeda.</p>';add('LANJUTKAN',()=>g.resume(),'primary');add('RETRY',()=>g.start(),'retry');add('ARSENAL',()=>g.openArsenal(),'arsenal');add('SETTINGS',()=>g.openSettings(),'settings');
     }else if(state==='victory'){
       title=g.stageId===8?'DAWN RETURNS':'RIFT SILENCED';sub=`VICTORY · RANK ${g.reward.rank}`;
       body=`<p>${g.stage.name} selesai dalam ${g.elapsed.toFixed(1)} detik. ${g.kills} musuh dikalahkan.</p><p>+${g.reward.xp} XP · +${g.reward.coins} COINS · LEVEL ${SR.level(p)}${g.reward.first?' · FIRST CLEAR':''}</p><p>${g.stageId===1?'Umbral Nova (I) unlocked.':g.stageId===5?'Last Eclipse (O) unlocked.':g.stageId===8?'Gerhana berakhir. Semua stage dapat dimainkan ulang.':'Rift berikutnya menunggu.'}</p>`;
-      if(g.stageId<8)add('NEXT STAGE',()=>g.start(g.stageId+1),'primary');add('REPLAY',()=>g.start(),'replay');add('UPGRADE',()=>this.screen('upgrades'),'upgrades');
+      if(g.stageId<8)add('NEXT STAGE',()=>g.start(g.stageId+1),'primary');add('REPLAY',()=>g.start(),'replay');add('UPGRADE',()=>this.screen('upgrades'),'upgrades');add('ARSENAL',()=>g.openArsenal(),'arsenal');
     }else if(state==='defeat'){
       title='NOT THE END';sub='DEFEAT';body='<p>Hindari tanda merah, gunakan dash, dan serang ketika musuh pulih. Tidak ada hadiah diberikan untuk kekalahan.</p>';add('COBA LAGI',()=>g.start(),'primary');
     }else if(state==='exit'){
       title='UNTIL DAWN';sub=g.save.write(p)?'PROGRESS SAVED':'EXPORT SAVE BEFORE CLOSING';body='<p>Kamu boleh menutup tab ini. Browser tidak mengizinkan game menutup tab yang dibuka manual.</p>';
     }
-    if(state!=='menu')add(state==='settings'&&g.panelReturn==='paused'&&g.activeRun?'BACK TO PAUSE':'BACK / MENU',()=>g.back(),'back');
+    if(state!=='menu')add(['settings','arsenal'].includes(state)&&g.panelReturn==='paused'&&g.activeRun?'BACK TO PAUSE':'BACK / MENU',()=>g.back(),'back');
     this.menu.innerHTML=`<div class="eyebrow">SHADOW RIFT · CAMPAIGN</div><h1>${title}</h1><h2>${sub}</h2>${body}<p id="save-status"></p><div class="buttons">${buttons.map((b,i)=>`<button id="${b.id}" class="${i===0?'primary':''}" ${b.disabled?'disabled':''}>${b.label}</button>`).join('')}</div>`;
     document.getElementById('save-status').textContent=g.save.message;
     for(const b of buttons)document.getElementById(b.id).onclick=b.fn;
     for(const b of this.menu.querySelectorAll('[data-stage]'))b.onclick=()=>g.start(Number(b.dataset.stage));
     for(const b of this.menu.querySelectorAll('[data-upgrade]'))b.onclick=()=>{if(SR.buyUpgrade(p,b.dataset.upgrade)){g.save.write(p);this.screen('upgrades');}};
+    if(state==='arsenal'){
+      document.getElementById('shop-message').textContent=this.shopMessage||'';
+      for(const b of this.menu.querySelectorAll('[data-category]'))b.onclick=()=>{this.shopCategory=b.dataset.category;this.shopMessage='';this.screen('arsenal');};
+      const transact=(action,id)=>{const result=action(p,id,g.activeRun?g.player:null);this.shopMessage=result.message;if(result.ok)g.save.write(p);this.screen('arsenal');};
+      for(const b of this.menu.querySelectorAll('[data-buy]'))b.onclick=()=>transact(SR.buyWeapon,b.dataset.buy);
+      for(const b of this.menu.querySelectorAll('[data-equip]'))b.onclick=()=>transact(SR.equipWeapon,b.dataset.equip);
+      for(const b of this.menu.querySelectorAll('[data-weapon-upgrade]'))b.onclick=()=>transact(SR.upgradeWeapon,b.dataset.weaponUpgrade);
+    }
     if(state==='settings'){
       for(const key of ['volume','music','shake','effects'])document.getElementById(key).oninput=()=>{
         const el=document.getElementById(key);p.settings[key]=key==='volume'?Number(el.value)/100:key==='effects'?el.value:el.checked;
@@ -553,7 +759,8 @@ SR.UI = class {
     document.getElementById('enemy-state').textContent=e.boss?`BOSS · PHASE ${e.phase}`:e.attack?.guardBreak?'⚠ GUARD BREAK':e.intent||'';
     document.getElementById('objective').textContent=g.waveDelay>0?'Rift berikutnya terbuka…':`WAVE ${g.wave+1}/${g.stage.waves.length} · ${g.enemies.length} musuh`;
     document.getElementById('energy-value').textContent=`${Math.floor(p.energy)} / ${p.maxEnergy}`;document.getElementById('energy-bar').style.width=`${p.energy/p.maxEnergy*100}%`;
-    document.getElementById('combo-state').textContent=p.comboFlash>0?p.comboLabel:p.combo?`${p.combo.split('').join(' → ')} → ${p.combo==='JJ'?'K · FINISHER':'J → K'}`:'COMBO · J → J → K';
+    const weapon=p.weapon,mag=p.magazines?.[p.weaponId];document.getElementById('weapon-status').textContent=weapon?`${weapon.name.toUpperCase()} +${weapon.level} · ${weapon.category==='Gun'?(mag.reload>0?'RELOAD '+mag.reload.toFixed(1)+'s':mag.ammo+'/'+weapon.capacity+' · R RELOAD'):weapon.category==='Magic'?weapon.cost+' EN / J':'J → J → K'}`:'';
+    document.getElementById('combo-state').textContent=p.comboFlash>0?p.comboLabel:p.combo?`${p.combo.split('').join(' → ')} → ${p.combo==='JJ'?'K · FINISHER':'J → K'}`:weapon?.category==='Sword'?'COMBO · J → J → K':'J PRIMARY · K ALTERNATE';
     for(const [type,cost,cd] of [['dash',20,p.dashCooldown],...Object.entries(SR.skills).map(([k,s])=>[k,s.cost,p.skillCooldowns[k]])]){
       const locked=type!=='dash'&&!p.unlockedSkills[type];document.getElementById('ability-'+type).classList.toggle('unavailable',locked||cd>0||p.energy<cost);
       document.getElementById(type+'-status').textContent=locked?`CLEAR STAGE ${type==='nova'?2:6}`:`${cost} EN · ${cd>0?cd.toFixed(1)+'s':p.energy<cost?'LOW ENERGY':'READY'}`;
@@ -567,23 +774,23 @@ SR.UI = class {
 SR.regions = ['The Fallen Kingdom', 'The Cursed Abyss', 'The Eternal Eclipse'];
 SR.stages = [
   {name:'Ashen Village', waves:[['scout'],['scout','guard']]},
-  {name:'Bloodwood Forest', waves:[['scout','scout'],['guard','caster']]},
+  {name:'Bloodwood Forest', waves:[['scout','archer'],['guard','caster']]},
   {name:'Ruined Citadel', waves:[['guard','scout'],['boss']], boss:'Veyr, the Hollow Crown'},
-  {name:'Hollow Temple', waves:[['caster','scout'],['guard','caster']]},
-  {name:'Crystal Catacombs', waves:[['scout','caster'],['guard','scout','caster']]},
+  {name:'Hollow Temple', waves:[['caster','assassin'],['guard','archer']]},
+  {name:'Crystal Catacombs', waves:[['archer','caster'],['brute','scout','caster']]},
   {name:'Abyss Gate', waves:[['caster','guard'],['boss']], boss:'Nhal, Abyss Keeper'},
-  {name:'Ember Fortress', waves:[['guard','guard'],['scout','caster','guard']]},
-  {name:'Throne of Shadows', waves:[['scout','caster','scout'],['guard','caster','guard']]},
-  {name:'The Last Eclipse', waves:[['guard','caster'],['boss']], boss:'Astrael, Eclipse Sovereign'}
+  {name:'Ember Fortress', waves:[['brute','guard'],['assassin','archer','guard']]},
+  {name:'Throne of Shadows', waves:[['assassin','caster','archer'],['brute','caster','guard']]},
+  {name:'The Last Eclipse', waves:[['assassin','brute'],['boss']], boss:'Astrael, Eclipse Sovereign'}
 ].map((s,i)=>({...s,id:i,region:Math.floor(i/3),coins:70+i*15,xp:90+i*20}));
 SR.spawnWave = (stage, wave, player) => stage.waves[wave].map((type,i)=>{
   const e = type === 'boss' ? SR.makeBoss(stage) : SR.makeEnemy();
-  e.kind=type; e.name=type==='boss'?stage.boss:{scout:'Ash Stalker',guard:'Rift Sentinel',caster:'Hex Weaver'}[type];
+  e.kind=type;e.name=type==='boss'?stage.boss:SR.enemyTypes[type].name;
   if(type!=='boss'){
-    e.maxHp=e.hp=({scout:45,guard:75,caster:55}[type])+stage.region*12;
-    e.speed={scout:180,guard:125,caster:125}[type];
-    e.damageScale=.65+stage.region*.12;
-  }
+    const config=SR.enemyTypes[type];e.maxHp=e.hp=config.hp+stage.region*10;e.speed=config.speed;e.rest=config.rest;e.tint=config.color;
+    e.damageScale=.65+stage.region*.10;e.reward={coins:config.coins,xp:config.xp};
+    if(type==='brute'){e.armor=.15;e.w=65;e.h=120;}if(type==='assassin')e.w=38;
+  }else{e.reward={coins:90+stage.region*35,xp:60+stage.region*20};}
   const side=player.x>1450?-1:1;
   e.x=Math.max(70,Math.min(2130,player.x+side*(360+i*105)));
   e.cooldown=1.1+i*.4; e.spawnGrace=.8; return e;
@@ -591,7 +798,7 @@ SR.spawnWave = (stage, wave, player) => stage.waves[wave].map((type,i)=>{
 
 </script><script>
 // Source: js/progression.js
-SR.freshProgress = () => ({version:1,started:false,unlocked:0,completed:[],coins:0,xp:0,upgrades:{hp:0,damage:0,energy:0,cooldown:0},ranks:{},settings:{volume:.45,music:true,effects:'high',shake:true}});
+SR.freshProgress = () => ({version:2,ownedWeapons:['rustblade'],equippedWeapon:'rustblade',weaponLevels:{rustblade:0},started:false,unlocked:0,completed:[],coins:0,xp:0,upgrades:{hp:0,damage:0,energy:0,cooldown:0},ranks:{},settings:{volume:.45,music:true,effects:'high',shake:true}});
 SR.level = progress => 1+Math.floor(progress.xp/250);
 SR.upgradeCost = (p,key) => 70+p.upgrades[key]*50;
 SR.buyUpgrade = (p,key) => {
@@ -605,13 +812,14 @@ SR.applyProgress = (player,p) => {
   player.maxEnergy=player.energy=100+p.upgrades.energy*15;
   player.damageScale=1+p.upgrades.damage*.12+level*.025;
   player.cooldownScale=1-p.upgrades.cooldown*.08;
+  if(SR.setWeapon)SR.setWeapon(player,p);
   player.unlockedSkills={rift:true,nova:p.completed.includes(1),eclipse:p.completed.includes(5)};
 };
 SR.finishStage = (p,id,stats) => {
   if(!Number.isInteger(id)||id<0||id>p.unlocked||id>=9)throw new Error('Invalid stage completion');
   const rank=stats.damageTaken===0&&stats.time<120?'S':stats.damageTaken<60&&stats.time<160?'A':stats.damageTaken<140?'B':'C';
   const first=!p.completed.includes(id),stage=SR.stages[id];
-  const coins=first?stage.coins:Math.floor(stage.coins*.25),xp=first?stage.xp:Math.floor(stage.xp*.3);
+  const coins=(first?stage.coins:Math.floor(stage.coins*.25))+(stats.threatCoins||0),xp=(first?stage.xp:Math.floor(stage.xp*.3))+(stats.threatXP||0);
   p.coins+=coins;p.xp+=xp;p.started=true;
   if(first)p.completed.push(id);
   p.unlocked=Math.min(8,Math.max(p.unlocked,id+1));
@@ -623,7 +831,7 @@ SR.finishStage = (p,id,stats) => {
 // Source: js/save.js
 SR.validateSave = value => {
   const integer=(n,min,max)=>Number.isInteger(n)&&n>=min&&n<=max;
-  if(!value||value.version!==1||typeof value.started!=='boolean'||!integer(value.unlocked,0,8)||!integer(value.coins,0,100000000)||!integer(value.xp,0,100000000))throw new Error('Invalid save');
+  if(!value||![1,2].includes(value.version)||typeof value.started!=='boolean'||!integer(value.unlocked,0,8)||!integer(value.coins,0,100000000)||!integer(value.xp,0,100000000))throw new Error('Invalid save');
   if(!Array.isArray(value.completed)||value.completed.length>9||new Set(value.completed).size!==value.completed.length)throw new Error('Invalid stages');
   const completed=[...value.completed].sort((a,b)=>a-b);
   if(completed.some((id,i)=>id!==i)||value.unlocked!==Math.min(8,completed.length))throw new Error('Invalid progression');
@@ -634,7 +842,15 @@ SR.validateSave = value => {
   for(const id of completed){if(!['C','B','A','S'].includes(value.ranks[id]))throw new Error('Invalid rank');p.ranks[id]=value.ranks[id];}
   const s=value.settings;
   if(!s||typeof s.volume!=='number'||!Number.isFinite(s.volume)||s.volume<0||s.volume>1||typeof s.music!=='boolean'||typeof s.shake!=='boolean'||!['low','high'].includes(s.effects))throw new Error('Invalid settings');
-  p.settings={volume:s.volume,music:s.music,shake:s.shake,effects:s.effects};return p;
+  p.settings={volume:s.volume,music:s.music,shake:s.shake,effects:s.effects};
+  if(value.version===2){
+    const owned=value.ownedWeapons;
+    if(!Array.isArray(owned)||owned.length>12||!owned.includes('rustblade')||new Set(owned).size!==owned.length||owned.some(id=>typeof id!=='string'||!Object.hasOwn(SR.weapons,id)))throw new Error('Invalid inventory');
+    if(!owned.includes(value.equippedWeapon)||!value.weaponLevels||typeof value.weaponLevels!=='object'||Array.isArray(value.weaponLevels)||Object.keys(value.weaponLevels).some(id=>!owned.includes(id)))throw new Error('Invalid loadout');
+    p.ownedWeapons=[...owned];p.equippedWeapon=value.equippedWeapon;p.weaponLevels={};
+    for(const id of owned){if(!integer(value.weaponLevels[id],0,5))throw new Error('Invalid weapon level');p.weaponLevels[id]=value.weaponLevels[id];}
+  }
+  return p;
 };
 SR.Save = class {
   constructor(storage){this.storage=storage;this.key='shadow-rift-save-v1';this.backupKey=this.key+'-backup';this.message='';}
@@ -686,10 +902,12 @@ SR.updateBoss = (e,p,dt,game) => {
   if(e.cooldown>0||e.spawnGrace>0||e.x<game.camera+25||e.x>game.camera+1255)return;
   const patterns=[['enemyHeavy','bossSweep'],['bossHex','bossSweep','enemyHeavy'],['bossSweep','bossHex','enemyHeavy']];
   const pattern=patterns[e.bossRegion];
-  const type=pattern[e.attacks++%pattern.length];
+  // Later phases add a readable ranged volley while retaining original attacks.
+  const type=phase>1&&e.attacks%4===3?'arrow':pattern[e.attacks%pattern.length];e.attacks++;
   if(SR.beginAttack(e,type)){
     e.attack.windup*=1-(phase-1)*.12;
     e.attack.damage=Math.round(e.attack.damage*(1+(phase-1)*.12));
+    if(e.attack.projectile)e.attack.projectile={...e.attack.projectile,color:['#f3ad8b','#a5c9ff','#e6abff'][e.bossRegion],angle:Math.atan2(p.y-p.h/2-(e.y-65),Math.max(1,distance))};
     if(type==='bossHex'){
       // Telegraph a stationary ground zone; the player can leave it before activation.
       e.attack=null;e.cooldown=1.7-(phase-1)*.2;
@@ -712,8 +930,8 @@ SR.Game = class {
   }
   reset(id){
     this.transition=2.4;this.transitionTitle=SR.stages[id].name;this.stage=SR.stages[id];this.stageId=id;this.player=SR.makePlayer();SR.applyProgress(this.player,this.progress);
-    this.enemies=[];this.enemy=SR.makeEnemy();this.elapsed=0;this.camera=0;this.particles=[];this.numbers=[];this.hazards=[];
-    this.shake=0;this.accumulator=0;this.activeRun=false;this.panelReturn='menu';this.wave=0;this.waveDelay=0;this.damageTaken=0;this.kills=0;this.reward=null;this.settled=false;this.input.clear();
+    this.enemies=[];this.enemy=SR.makeEnemy();this.elapsed=0;this.camera=0;this.particles=[];this.numbers=[];this.hazards=[];this.projectiles=[];this.beams=[];this.blasts=[];
+    this.shake=0;this.accumulator=0;this.activeRun=false;this.panelReturn='menu';this.wave=0;this.waveDelay=0;this.damageTaken=0;this.kills=0;this.threatCoins=0;this.threatXP=0;this.reward=null;this.settled=false;this.input.clear();
   }
   start(id=this.stageId){
     if(!Number.isInteger(id)||id<0||id>this.progress.unlocked||id>=9)return false;
@@ -723,7 +941,8 @@ SR.Game = class {
   newGame(){const settings={...this.progress.settings};this.progress=SR.freshProgress();this.progress.settings=settings;this.audio.settings=this.progress.settings;this.save.write(this.progress);this.start(0);}
   showMenu(){this.state='menu';this.input.clear();this.player.buffer=null;this.ui.screen(this.state);}
   openSettings(){this.panelReturn=this.state==='paused'?'paused':'menu';this.input.clear();this.ui.screen('settings');}
-  back(){if(this.state==='settings'&&this.panelReturn==='paused'&&this.activeRun)this.ui.screen('paused');else this.showMenu();}
+  openArsenal(){this.panelReturn=this.state==='paused'?'paused':this.state==='victory'?'victory':'menu';this.input.clear();this.ui.screen('arsenal');}
+  back(){if(this.state==='arsenal'&&this.panelReturn==='victory'&&this.reward){this.ui.screen('victory');return;}if(['settings','arsenal'].includes(this.state)&&this.panelReturn==='paused'&&this.activeRun)this.ui.screen('paused');else this.showMenu();}
   pause(){if(this.state!=='playing')return;this.state='paused';this.input.clear();this.player.buffer=null;this.ui.screen(this.state);}
   resume(){if(!this.activeRun||this.settled)return false;this.state='playing';this.input.clear();this.ui.screen(this.state);this.canvas.focus();}
   hit(target,damage,face,event='hit'){
@@ -736,7 +955,7 @@ SR.Game = class {
   }
   finish(won){
     if(this.settled)return;this.settled=true;this.activeRun=false;this.state=won?'victory':'defeat';
-    if(won){this.reward=SR.finishStage(this.progress,this.stageId,{time:this.elapsed,damageTaken:this.damageTaken});this.save.write(this.progress);}
+    if(won){this.reward=SR.finishStage(this.progress,this.stageId,{time:this.elapsed,damageTaken:this.damageTaken,threatCoins:this.threatCoins,threatXP:this.threatXP});this.save.write(this.progress);}
     this.input.clear();this.ui.screen(this.state);this.ui.update();
   }
   step(dt){
@@ -748,8 +967,9 @@ SR.Game = class {
       SR.tickActor(e,dt);SR.separate(this.player,e);
     }
     for(let i=0;i<this.enemies.length;i++)for(let j=i+1;j<this.enemies.length;j++)SR.separate(this.enemies[i],this.enemies[j]);
-    SR.resolveAttack(this.player,this.enemies,dt,(...args)=>this.hit(...args));
-    for(const e of this.enemies)if(e.hp>0)SR.resolveAttack(e,this.player,dt,(...args)=>this.hit(...args));
+    SR.resolveAttack(this.player,this.enemies,dt,(...args)=>this.hit(...args),this);
+    for(const e of this.enemies)if(e.hp>0)SR.resolveAttack(e,this.player,dt,(...args)=>this.hit(...args),this);
+    SR.updateProjectiles(this,dt);
     for(const h of this.hazards){
       h.wait-=dt;if(h.wait>0)continue;h.life-=dt;
       if(!h.hit&&this.player.invuln<=0&&Math.abs(this.player.x-h.x)<h.r+this.player.w/2&&this.player.y>500){
@@ -757,13 +977,13 @@ SR.Game = class {
       }
     }
     this.hazards=this.hazards.filter(h=>h.wait>0||h.life>0);
-    const dead=this.enemies.filter(e=>e.hp<=0);this.kills+=dead.length;this.enemies=this.enemies.filter(e=>e.hp>0);
+    const dead=this.enemies.filter(e=>e.hp<=0);this.kills+=dead.length;for(const e of dead){this.threatCoins+=e.reward?.coins||0;this.threatXP+=e.reward?.xp||0;}this.enemies=this.enemies.filter(e=>e.hp>0);
     this.enemy=this.enemies.find(e=>e.boss)||this.enemies.reduce((best,e)=>!best||Math.abs(e.x-this.player.x)<Math.abs(best.x-this.player.x)?e:best,null)||{...this.enemy,hp:0};
     if(this.player.hp<=0){this.finish(false);return;}
     if(this.enemies.length===0){
       if(this.wave===this.stage.waves.length-1){this.finish(true);return;}
       this.waveDelay+=dt;
-      if(this.waveDelay>=1.8){this.wave++;this.waveDelay=0;if(this.stage.waves[this.wave].includes('boss')){this.transition=2.4;this.transitionTitle=this.stage.boss;}this.hazards=[];this.player.hp=Math.min(this.player.maxHp,this.player.hp+20);this.player.energy=Math.min(this.player.maxEnergy,this.player.energy+25);this.enemies=SR.spawnWave(this.stage,this.wave,this.player);}
+      if(this.waveDelay>=1.8){this.wave++;this.waveDelay=0;this.projectiles=[];if(this.stage.waves[this.wave].includes('boss')){this.transition=2.4;this.transitionTitle=this.stage.boss;}this.hazards=[];this.player.hp=Math.min(this.player.maxHp,this.player.hp+20);this.player.energy=Math.min(this.player.maxEnergy,this.player.energy+25);this.enemies=SR.spawnWave(this.stage,this.wave,this.player);}
     }
     for(const p of this.particles){p.life-=dt;p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=500*dt;}this.particles=this.particles.filter(p=>p.life>0);
     for(const n of this.numbers){n.life-=dt;n.y-=48*dt;}this.numbers=this.numbers.filter(n=>n.life>0);this.shake=Math.max(0,this.shake-dt*4);

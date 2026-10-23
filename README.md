@@ -3,9 +3,38 @@ gamee
 
 ---
 
-# Shadow Rift: Last Eclipse — Campaign 1.1
+# Shadow Rift: Last Eclipse — World & Arsenal 2.0
 
-Game action fighter 2D original dan offline untuk browser laptop. Campaign sembilan stage, tiga wilayah, dan tiga boss. Tahap C–E menambahkan wave multi-musuh, progression, upgrade, save lokal, musik procedural, pengaturan, dan tes campaign ke combat Tahap B.
+Game action fighter 2D original dan offline untuk browser laptop. Sembilan stage, tiga wilayah, tiga boss, enam peran musuh, dan 12 senjata yang dapat dibeli dan dipakai dalam combat.
+
+## Pembaruan 2.0
+
+- Sembilan lingkungan procedural berbeda, masing-masing tiga lapisan parallax yang mengikuti kamera, partikel lokal, dan transisi masuk stage/boss. Cache dibatasi pada tiga bidang stage aktif; Low effects mengurangi partikel lingkungan dari 36 menjadi 10.
+- Enam peran: Stalker menerkam/mundur; Sentinel menjaga depan dan BREAK; Weaver memakai orb/zona; Archer membidik dengan garis telegraph; Assassin melakukan dash untuk flank; Brute berarmor dan menyerang berat. Maksimum tiga musuh per wave. Elite dan boss memberi hadiah ancaman ketika stage dimenangkan.
+- Boss mempertahankan fase dan pola lama, ditambah volley bertelegraph pada fase lanjut dan aura berwarna sesuai wilayah/fase.
+- Arsenal dapat dibuka dari menu utama, Pause, atau kemenangan. Buy, Equip, inventory, upgrade lima level, ammo/reload, dan sihir memakai transaksi/gameplay nyata. Equip ditolak ketika aksi, stun, cooldown, dash, atau reload masih aktif.
+- Save schema 2 memigrasikan schema 1, mempertahankan seluruh progres/settings dan memberikan Rustblade. Nama storage lama dipertahankan agar save terdahulu ditemukan. Inventory dan level divalidasi; backup valid tidak ditimpa data invalid.
+
+## Arsenal dan senjata
+
+Satu senjata aktif. J/K mengikuti kelas; skill U/I/O tetap tersedia pada semua kelas. Sword mempertahankan J → J → K. Gun menggunakan peluru bergerak dan reload otomatis saat kosong atau manual **R**. Magic memakai energi yang sama dengan skill/dash. HUD menampilkan senjata, level, peluru/reload atau biaya energi. Memulai stage mengisi magazen; pergantian equip saat pause tidak memberi isi ulang gratis.
+
+| Kelas | Senjata | Koin | Perilaku |
+| --- | --- | ---: | --- |
+| Sword | Rustblade | 0 | Seimbang, finisher JJK |
+| Sword | Nightfang | 250 | Ayunan cepat, jangkauan pendek |
+| Sword | Great Riftblade | 500 | Damage/jangkauan besar, recovery lambat |
+| Sword | Eclipse Edge | 1000 | Heavy/finisher melepas tebasan energi |
+| Gun | Rift Pistol | 300 | Tembakan tunggal cepat; K memakai dua peluru |
+| Gun | Twin Handcannons | 600 | J dua tembakan, K tiga tembakan |
+| Gun | Void Rifle | 850 | Peluru cepat menembus hingga tiga target |
+| Gun | Eclipse Cannon | 1200 | Ledakan area; K memperluas ledakan |
+| Magic | Apprentice Focus | 350 | Bolt hemat energi; K menembus dua target |
+| Magic | Storm Staff | 650 | Petir menyambung ke dua target tambahan |
+| Magic | Void Grimoire | 900 | Ledakan dan slow sementara |
+| Magic | Astral Catalyst | 1300 | Damage tinggi, penetrasi/ledakan, energi mahal |
+
+Upgrade senjata maksimal level 5: +8% damage dan −2,5% waktu serangan per level, tambahan satu kapasitas peluru untuk Gun, serta −5% biaya energi Magic (dibulatkan ke atas). Harga upgrade = 60 + 10% harga senjata + 65 × level saat ini. Harga, damage, recovery, kapasitas, dan efek ada di `js/weapons.js`; aturan transaksi ada di `js/shop.js`. Kartu menampilkan statistik dasar senjata; level karakter dan upgrade Forge juga memengaruhi damage akhir.
 
 ## Pembaruan 1.1
 
@@ -36,8 +65,9 @@ Launcher BAT disiapkan dengan path terkutip dan CRLF untuk Windows; pengujian ru
 | --- | --- |
 | A / D | Bergerak dan menghadap kiri/kanan |
 | W | Lompat dari tanah |
-| J | Serangan ringan, base damage 15 |
-| K | Serangan berat, base damage 32 |
+| J | Serangan utama senjata aktif; Rustblade base damage 15 |
+| K | Serangan berat/alternatif; Rustblade base damage 32 |
+| R | Reload manual Gun |
 | J → J → K | Rift Breaker, finisher base damage 52 |
 | L | Dash, 20 energi, cooldown 0,8 detik |
 | Space tahan | Block dari depan ketika di tanah |
@@ -73,7 +103,7 @@ Boss memiliki armor yang mencegah stun lock. Veyr memakai heavy strike dan sweep
 ## Progression, hadiah, dan save
 
 - Kemenangan pertama: stage 1 memberi 70 koin / 90 XP, bertambah 15 koin / 20 XP per stage.
-- Replay hanya memberi 25% koin dan 30% XP (dibulatkan ke bawah), setelah stage benar-benar selesai. Kekalahan tidak memberi hadiah. Settlement menjaga hadiah tidak terulang dalam pertarungan yang sama.
+- Hadiah dasar replay hanya 25% koin dan 30% XP (dibulatkan ke bawah). Bonus ancaman musuh dibayarkan setelah stage benar-benar selesai: Stalker 12/8, Sentinel 20/14, Weaver 22/16, Archer 20/14, Assassin 25/18, Brute 40/28 koin/XP; boss 90/60 ditambah 35/20 per wilayah berikutnya. Bonus ini berlaku juga pada replay. Kekalahan tidak memberi hadiah. Settlement menjaga hadiah tidak terulang dalam pertarungan yang sama.
 - Level naik setiap 250 XP: setiap level tambahan memberi +4 HP dan +2,5% damage.
 - Forge menjual empat upgrade, maksimal 5 tingkat masing-masing: HP +20; damage +12%; energi +15; cooldown skill −8%. Harga mulai 70 koin, naik 50 per tingkat. Berlaku pada pertarungan berikutnya.
 - Rank S: tanpa damage dan waktu <120 detik. A: damage diterima <60 dan waktu <160 detik. B: damage <140. Selain itu C. Rank terbaik disimpan per stage.
@@ -92,7 +122,8 @@ Klik Sound Off untuk mengaktifkan audio melalui interaksi pengguna. Efek hit dan
 - `js/input.js`, `player.js`, `combat.js`: input, gerak, combo, skill, hitbox, damage.
 - `js/enemies.js`, `bosses.js`, `stages.js`: AI, fase boss, konfigurasi dan spawn wave.
 - `js/progression.js`, `save.js`: reward, rank, upgrade, schema dan persistence.
-- `js/render.js`, `audio.js`: visual procedural dan audio lokal.
+- `js/backgrounds.js`, `render.js`, `audio.js`: lingkungan, visual procedural dan audio lokal.
+- `js/weapons.js`, `shop.js`, `projectiles.js`: katalog, transaksi dan proyektil dengan swept collision.
 - `js/ui.js`, `game.js`: menu dan loop simulasi fixed step 120 Hz; delta frame dibatasi, objek mati/efek dibersihkan dan partikel dibatasi.
 - `RUN-GAME.bat`, `serve.py`: launcher dan server opsional.
 - `tests/*.test.cjs`, `tests/browser-smoke.cjs`: tes unit dan campaign browser.
@@ -103,7 +134,7 @@ Tidak ada dependensi runtime. Classic scripts berbagi namespace `SR` agar tidak 
 ## Pengujian
 
 ```sh
-node --test tests/combat.test.cjs tests/abilities.test.cjs tests/campaign.test.cjs tests/reliability.test.cjs
+node --test tests/*.test.cjs
 ```
 
 Browser smoke opsional memerlukan Playwright dan Chromium, terpisah dari runtime:
@@ -111,11 +142,14 @@ Browser smoke opsional memerlukan Playwright dan Chromium, terpisah dari runtime
 ```sh
 node tests/browser-smoke.cjs http://127.0.0.1:8765
 node tests/browser-reliability.cjs http://127.0.0.1:8765
+node tests/browser-backgrounds.cjs http://127.0.0.1:8765
+node tests/browser-arsenal.cjs http://127.0.0.1:8765
+node tests/browser-classes.cjs http://127.0.0.1:8765
 ```
 
 `SR_PLAYWRIGHT` menunjuk modul Playwright eksternal; `SR_CHROMIUM_PATH` menunjuk executable Chromium. `SR_STANDALONE` menunjuk HTML tunggal untuk tes via setContent dengan jaringan dimatikan sejak awal; storage about:blank tidak tersedia sehingga pengujian persistence dilakukan pada versi server. `SR_SCREENSHOT` opsional menentukan output screenshot.
 
-Tes browser menjalankan kontrol, sembilan stage dengan input biasa dan pembelian upgrade yang sah, klik Next Stage, ketiga fase final boss, hadiah satu kali, kalah/retry, stage select, settings, export/import valid/invalid, dan pembatalan New Game. Versi server diuji reload save, pemulihan cadangan, serta penanganan ketika kedua save rusak. Runner reliability memeriksa menu/resume, Settings saat pause, kanal audio, import asynchronous yang terlambat, dan preferensi setelah New Game. Bot tidak mengubah HP, damage, atau status unlock. Ini smoke test fungsional; bukan benchmark semua laptop atau pengujian semua versi browser Windows.
+Tes browser menjalankan kontrol, sembilan stage dengan input biasa dan pembelian upgrade yang sah, klik Next Stage, ketiga fase final boss, hadiah satu kali, kalah/retry, stage select, settings, export/import valid/invalid, dan pembatalan New Game. Versi server diuji reload save, pemulihan cadangan, serta penanganan ketika kedua save rusak. Runner reliability memeriksa menu/resume, Settings saat pause, kanal audio, import asynchronous yang terlambat, dan preferensi setelah New Game. Bot tidak mengubah HP, damage, atau status unlock. Runner classes menyelesaikan sembilan stage dengan Rustblade sebelum membeli Pistol/Focus dari hadiah sah, lalu memakai kelas itu hingga boss akhir bersama skill/Forge. Runner Arsenal memakai saldo fixture untuk memeriksa UI transaksi, reload, equip, dan persistence. Tes unit mencakup 12 senjata, migration, backup, ekonomi, hit detection, dan batas arena. Ini smoke test fungsional; bukan benchmark semua laptop atau pengujian semua versi browser Windows.
 
 ## Troubleshooting
 

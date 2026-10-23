@@ -15,6 +15,13 @@ SR.moves = {
   enemyHeavy: {windup: 1.0, active: .20, recovery: .85, damage: 30, range: 155, knock: 390, stun: .5, guardBreak: true}
 };
 Object.assign(SR.moves,{hex:{windup:.85,active:.18,recovery:.7,damage:16,range:280,knock:160,stun:.2},bossSweep:{windup:.9,active:.22,recovery:.8,damage:24,range:210,knock:340,stun:.35,radial:true},bossHex:{windup:1,active:.2,recovery:.6,damage:20,range:200,knock:200,stun:.3}});
+Object.assign(SR.moves,{
+ lunge:{windup:.5,active:.14,recovery:.55,damage:14,range:100,knock:170,stun:.2},
+ bruteSmash:{windup:1.1,active:.2,recovery:.8,damage:27,range:170,knock:380,stun:.4,guardBreak:true},
+ arrow:{windup:.95,active:.1,recovery:.5,damage:13,range:500,knock:100,stun:.15,projectile:{speed:490,range:600,r:3}},
+ hexBolt:{windup:.85,active:.1,recovery:.5,damage:15,range:380,knock:100,stun:.2,projectile:{speed:300,range:500,r:8,blast:45}},
+ hexZone:{windup:1.2,active:.05,recovery:.4,damage:12,range:380,area:true}
+});
 SR.beginAttack = (actor, type) => {
   if (!SR.moves[type] || actor.hp <= 0 || actor.attack || actor.cooldown > 0 || actor.stun > 0 || actor.dash > 0 || actor.blocking) return false;
   actor.attack = {...SR.moves[type], type, time: 0, hit: false, targets: new Set()};
@@ -26,7 +33,7 @@ SR.tickActor = (a, dt) => {
   for (const key of ['cooldown', 'stun', 'invuln', 'flash']) a[key] = Math.max(0, a[key] - dt);
   if (a.hp <= 0) { a.vx *= Math.exp(-10 * dt); a.attack = null; a.blocking = false; }
   if (a.stun > 0) a.vx *= Math.exp(-5 * dt);
-  a.vy += SR.ARENA.gravity * dt; a.x += a.vx * dt; a.y += a.vy * dt;
+  a.vy += SR.ARENA.gravity * dt; a.slow=Math.max(0,(a.slow||0)-dt); a.x += a.vx * dt*(a.slow>0?.55:1); a.y += a.vy * dt;
   a.x = Math.max(a.w / 2, Math.min(SR.ARENA.width - a.w / 2, a.x));
   a.grounded = a.y >= SR.ARENA.ground;
   if (a.grounded) { a.y = SR.ARENA.ground; a.vy = 0; }
@@ -37,16 +44,7 @@ SR.attackBox = a => ({
   right: a.attack.radial || a.face > 0 ? a.x + a.attack.range : a.x,
   top: a.y - a.h - (a.attack.radial ? 45 : 12), bottom: a.y - 18
 });
-SR.resolveAttack = (a, targets, dt, onHit = () => {}) => {
-  const victims=Array.isArray(targets)?targets:[targets];
-  const attack = a.attack;
-  if (!attack) return;
-  attack.time += dt;
-  for(const b of victims){
-  if (attack.time >= attack.windup && attack.time < attack.windup + attack.active && !attack.targets.has(b) && b.hp > 0 && b.invuln <= 0) {
-    const box = SR.attackBox(a);
-    if (box.right > b.x - b.w / 2 && box.left < b.x + b.w / 2 && box.bottom > b.y - b.h && box.top < b.y) {
-      attack.hit = true;attack.targets.add(b);
+SR.dealHit = (a,b,attack,onHit=()=>{}) => {
       let damage = attack.damage, knock = attack.knock, stun = attack.stun, event = 'hit';
       const facingAttacker = (a.x - b.x) * b.face >= 0;
       if (b.blocking && b.grounded && facingAttacker) {
@@ -58,16 +56,39 @@ SR.resolveAttack = (a, targets, dt, onHit = () => {}) => {
           stun = .7; event = 'break'; SR.notifyPlayer(b, 'GUARD BROKEN');
         }
       }
+      if(b.guarding&&facingAttacker){
+        if(attack.guardBreak||['heavy','finisher'].includes(attack.type)){b.guardLock=1.4;b.guarding=false;}
+        else{damage=Math.max(1,Math.round(damage*.4));knock*=.3;event='block';}
+      }
+      if(b.armor)damage=Math.max(1,Math.round(damage*(1-b.armor)));
+      if(attack.slow)b.slow=Math.max(b.slow||0,attack.slow);
       b.hp = Math.max(0, b.hp - damage); b.stun = stun; b.invuln = .24; b.flash = .12;
       const direction = attack.radial ? (b.x >= a.x ? 1 : -1) : a.face;
       b.vx = direction * knock*(b.boss?.18:1); b.vy = event === 'block'||b.boss ? 0 : -110; if(!b.boss)b.attack = null;else b.stun=0;
       if (b.team === 'player') { SR.breakCombo(b); b.dash = 0; }
       onHit(b, damage, direction, event);
+};
+SR.resolveAttack = (a, targets, dt, onHit = () => {}, game) => {
+  const victims=Array.isArray(targets)?targets:[targets];
+  const attack = a.attack;
+  if (!attack) return;
+  attack.time += dt;
+  if(attack.projectile&&game){
+    while((attack.emitted||0)<(attack.burst||1)&&attack.time>=attack.windup+(attack.emitted||0)*.08){
+      SR.spawnProjectile(game,a,{...attack.projectile,damage:attack.damage});attack.emitted=(attack.emitted||0)+1;
+    }
+  }
+  for(const b of attack.projectile||attack.area?[]:victims){
+  if (attack.time >= attack.windup && attack.time < attack.windup + attack.active && !attack.targets.has(b) && b.hp > 0 && b.invuln <= 0) {
+    const box = SR.attackBox(a);
+    if (box.right > b.x - b.w / 2 && box.left < b.x + b.w / 2 && box.bottom > b.y - b.h && box.top < b.y) {
+      attack.hit = true;attack.targets.add(b);
+      SR.dealHit(a,b,attack,onHit);
     }
   }
   }
   if (attack.time >= attack.windup + attack.active + attack.recovery) {
-    a.attack = null; a.cooldown = a.team === 'enemy' ? .6 : .08;
+    a.attack = null; a.cooldown = a.team === 'enemy' ? (a.rest||.6) : .08;
   }
 };
 SR.separate = (a, b) => {

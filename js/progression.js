@@ -18,7 +18,7 @@ SR.finishStage = (p,id,stats) => {
   if(!Number.isInteger(id)||id<0||id>p.unlocked||id>=9)throw new Error('Invalid stage completion');
   const rank=stats.damageTaken===0&&stats.time<120?'S':stats.damageTaken<60&&stats.time<160?'A':stats.damageTaken<140?'B':'C';
   const first=!p.completed.includes(id),stage=SR.stages[id];
-  const coins=first?stage.coins:Math.floor(stage.coins*.25),xp=first?stage.xp:Math.floor(stage.xp*.3);
+  const coins=(first?stage.coins:Math.floor(stage.coins*.25))+(stats.threatCoins||0),xp=(first?stage.xp:Math.floor(stage.xp*.3))+(stats.threatXP||0);
   p.coins+=coins;p.xp+=xp;p.started=true;
   if(first)p.completed.push(id);
   p.unlocked=Math.min(8,Math.max(p.unlocked,id+1));

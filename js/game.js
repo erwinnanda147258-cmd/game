@@ -9,8 +9,8 @@ SR.Game = class {
   }
   reset(id){
     this.transition=2.4;this.transitionTitle=SR.stages[id].name;this.stage=SR.stages[id];this.stageId=id;this.player=SR.makePlayer();SR.applyProgress(this.player,this.progress);
-    this.enemies=[];this.enemy=SR.makeEnemy();this.elapsed=0;this.camera=0;this.particles=[];this.numbers=[];this.hazards=[];
-    this.shake=0;this.accumulator=0;this.activeRun=false;this.panelReturn='menu';this.wave=0;this.waveDelay=0;this.damageTaken=0;this.kills=0;this.reward=null;this.settled=false;this.input.clear();
+    this.enemies=[];this.enemy=SR.makeEnemy();this.elapsed=0;this.camera=0;this.particles=[];this.numbers=[];this.hazards=[];this.projectiles=[];this.beams=[];this.blasts=[];
+    this.shake=0;this.accumulator=0;this.activeRun=false;this.panelReturn='menu';this.wave=0;this.waveDelay=0;this.damageTaken=0;this.kills=0;this.threatCoins=0;this.threatXP=0;this.reward=null;this.settled=false;this.input.clear();
   }
   start(id=this.stageId){
     if(!Number.isInteger(id)||id<0||id>this.progress.unlocked||id>=9)return false;
@@ -33,7 +33,7 @@ SR.Game = class {
   }
   finish(won){
     if(this.settled)return;this.settled=true;this.activeRun=false;this.state=won?'victory':'defeat';
-    if(won){this.reward=SR.finishStage(this.progress,this.stageId,{time:this.elapsed,damageTaken:this.damageTaken});this.save.write(this.progress);}
+    if(won){this.reward=SR.finishStage(this.progress,this.stageId,{time:this.elapsed,damageTaken:this.damageTaken,threatCoins:this.threatCoins,threatXP:this.threatXP});this.save.write(this.progress);}
     this.input.clear();this.ui.screen(this.state);this.ui.update();
   }
   step(dt){
@@ -45,8 +45,9 @@ SR.Game = class {
       SR.tickActor(e,dt);SR.separate(this.player,e);
     }
     for(let i=0;i<this.enemies.length;i++)for(let j=i+1;j<this.enemies.length;j++)SR.separate(this.enemies[i],this.enemies[j]);
-    SR.resolveAttack(this.player,this.enemies,dt,(...args)=>this.hit(...args));
-    for(const e of this.enemies)if(e.hp>0)SR.resolveAttack(e,this.player,dt,(...args)=>this.hit(...args));
+    SR.resolveAttack(this.player,this.enemies,dt,(...args)=>this.hit(...args),this);
+    for(const e of this.enemies)if(e.hp>0)SR.resolveAttack(e,this.player,dt,(...args)=>this.hit(...args),this);
+    SR.updateProjectiles(this,dt);
     for(const h of this.hazards){
       h.wait-=dt;if(h.wait>0)continue;h.life-=dt;
       if(!h.hit&&this.player.invuln<=0&&Math.abs(this.player.x-h.x)<h.r+this.player.w/2&&this.player.y>500){
@@ -54,13 +55,13 @@ SR.Game = class {
       }
     }
     this.hazards=this.hazards.filter(h=>h.wait>0||h.life>0);
-    const dead=this.enemies.filter(e=>e.hp<=0);this.kills+=dead.length;this.enemies=this.enemies.filter(e=>e.hp>0);
+    const dead=this.enemies.filter(e=>e.hp<=0);this.kills+=dead.length;for(const e of dead){this.threatCoins+=e.reward?.coins||0;this.threatXP+=e.reward?.xp||0;}this.enemies=this.enemies.filter(e=>e.hp>0);
     this.enemy=this.enemies.find(e=>e.boss)||this.enemies.reduce((best,e)=>!best||Math.abs(e.x-this.player.x)<Math.abs(best.x-this.player.x)?e:best,null)||{...this.enemy,hp:0};
     if(this.player.hp<=0){this.finish(false);return;}
     if(this.enemies.length===0){
       if(this.wave===this.stage.waves.length-1){this.finish(true);return;}
       this.waveDelay+=dt;
-      if(this.waveDelay>=1.8){this.wave++;this.waveDelay=0;if(this.stage.waves[this.wave].includes('boss')){this.transition=2.4;this.transitionTitle=this.stage.boss;}this.hazards=[];this.player.hp=Math.min(this.player.maxHp,this.player.hp+20);this.player.energy=Math.min(this.player.maxEnergy,this.player.energy+25);this.enemies=SR.spawnWave(this.stage,this.wave,this.player);}
+      if(this.waveDelay>=1.8){this.wave++;this.waveDelay=0;this.projectiles=[];if(this.stage.waves[this.wave].includes('boss')){this.transition=2.4;this.transitionTitle=this.stage.boss;}this.hazards=[];this.player.hp=Math.min(this.player.maxHp,this.player.hp+20);this.player.energy=Math.min(this.player.maxEnergy,this.player.energy+25);this.enemies=SR.spawnWave(this.stage,this.wave,this.player);}
     }
     for(const p of this.particles){p.life-=dt;p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=500*dt;}this.particles=this.particles.filter(p=>p.life>0);
     for(const n of this.numbers){n.life-=dt;n.y-=48*dt;}this.numbers=this.numbers.filter(n=>n.life>0);this.shake=Math.max(0,this.shake-dt*4);

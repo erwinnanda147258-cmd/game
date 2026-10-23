@@ -11,10 +11,12 @@ SR.updateBoss = (e,p,dt,game) => {
   if(e.cooldown>0||e.spawnGrace>0||e.x<game.camera+25||e.x>game.camera+1255)return;
   const patterns=[['enemyHeavy','bossSweep'],['bossHex','bossSweep','enemyHeavy'],['bossSweep','bossHex','enemyHeavy']];
   const pattern=patterns[e.bossRegion];
-  const type=pattern[e.attacks++%pattern.length];
+  // Later phases add a readable ranged volley while retaining original attacks.
+  const type=phase>1&&e.attacks%4===3?'arrow':pattern[e.attacks%pattern.length];e.attacks++;
   if(SR.beginAttack(e,type)){
     e.attack.windup*=1-(phase-1)*.12;
     e.attack.damage=Math.round(e.attack.damage*(1+(phase-1)*.12));
+    if(e.attack.projectile)e.attack.projectile={...e.attack.projectile,color:['#f3ad8b','#a5c9ff','#e6abff'][e.bossRegion],angle:Math.atan2(p.y-p.h/2-(e.y-65),Math.max(1,distance))};
     if(type==='bossHex'){
       // Telegraph a stationary ground zone; the player can leave it before activation.
       e.attack=null;e.cooldown=1.7-(phase-1)*.2;

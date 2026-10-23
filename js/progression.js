@@ -1,4 +1,4 @@
-SR.freshProgress = () => ({version:1,started:false,unlocked:0,completed:[],coins:0,xp:0,upgrades:{hp:0,damage:0,energy:0,cooldown:0},ranks:{},settings:{volume:.45,music:true,effects:'high',shake:true}});
+SR.freshProgress = () => ({version:2,ownedWeapons:['rustblade'],equippedWeapon:'rustblade',weaponLevels:{rustblade:0},started:false,unlocked:0,completed:[],coins:0,xp:0,upgrades:{hp:0,damage:0,energy:0,cooldown:0},ranks:{},settings:{volume:.45,music:true,effects:'high',shake:true}});
 SR.level = progress => 1+Math.floor(progress.xp/250);
 SR.upgradeCost = (p,key) => 70+p.upgrades[key]*50;
 SR.buyUpgrade = (p,key) => {
@@ -12,6 +12,7 @@ SR.applyProgress = (player,p) => {
   player.maxEnergy=player.energy=100+p.upgrades.energy*15;
   player.damageScale=1+p.upgrades.damage*.12+level*.025;
   player.cooldownScale=1-p.upgrades.cooldown*.08;
+  if(SR.setWeapon)SR.setWeapon(player,p);
   player.unlockedSkills={rift:true,nova:p.completed.includes(1),eclipse:p.completed.includes(5)};
 };
 SR.finishStage = (p,id,stats) => {

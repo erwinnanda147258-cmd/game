@@ -26,6 +26,7 @@ SR.beginAttack = (actor, type) => {
   if (!SR.moves[type] || actor.hp <= 0 || actor.attack || actor.cooldown > 0 || actor.stun > 0 || actor.dash > 0 || actor.blocking) return false;
   actor.attack = {...SR.moves[type], type, time: 0, hit: false, targets: new Set()};
   actor.attack.damage=Math.round(actor.attack.damage*(actor.damageScale||1));
+  if(actor.team==='player'&&['light','heavy','finisher'].includes(type)&&SR.modifySwordAttack)SR.modifySwordAttack(actor,actor.attack);
   actor.vx = 0;
   return true;
 };
@@ -62,7 +63,7 @@ SR.dealHit = (a,b,attack,onHit=()=>{}) => {
       }
       if(b.armor)damage=Math.max(1,Math.round(damage*(1-b.armor)));
       if(attack.slow)b.slow=Math.max(b.slow||0,attack.slow);
-      b.hp = Math.max(0, b.hp - damage); b.stun = stun; b.invuln = .24; b.flash = .12;
+      b.hp = Math.max(0, b.hp - damage); b.stun = stun; b.invuln = attack.type==='projectile'&&b.team==='enemy' ? .06 : .24; b.flash = .12;
       const direction = attack.radial ? (b.x >= a.x ? 1 : -1) : a.face;
       b.vx = direction * knock*(b.boss?.18:1); b.vy = event === 'block'||b.boss ? 0 : -110; if(!b.boss)b.attack = null;else b.stun=0;
       if (b.team === 'player') { SR.breakCombo(b); b.dash = 0; }
@@ -73,6 +74,7 @@ SR.resolveAttack = (a, targets, dt, onHit = () => {}, game) => {
   const attack = a.attack;
   if (!attack) return;
   attack.time += dt;
+  if(attack.bonusProjectile&&game&&!attack.bonusFired&&attack.time>=attack.windup){SR.spawnProjectile(game,a,{...attack.bonusProjectile,damage:Math.round(attack.damage*.45)});attack.bonusFired=true;}
   if(attack.projectile&&game){
     while((attack.emitted||0)<(attack.burst||1)&&attack.time>=attack.windup+(attack.emitted||0)*.08){
       SR.spawnProjectile(game,a,{...attack.projectile,damage:attack.damage});attack.emitted=(attack.emitted||0)+1;

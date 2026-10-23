@@ -1,5 +1,5 @@
 const {test}=require('node:test'),assert=require('node:assert/strict');
-for(const f of ['input','player','enemies','combat','stages','progression','save','bosses'])require('../js/'+f+'.js');
+for(const f of ['input','player','enemies','combat','weapons','shop','stages','progression','save','bosses'])require('../js/'+f+'.js');
 const S=globalThis.SR;
 test('nine ordered stages, three bosses, final boss three phases',()=>{
  assert.equal(S.stages.length,9);assert.deepEqual(S.stages.filter(s=>s.boss).map(s=>s.id),[2,5,8]);

@@ -19,6 +19,7 @@ SR.spendEnergy = (p, amount) => {
 SR.breakCombo = p => { p.combo = ''; p.comboWindow = 0; p.buffer = null; };
 
 SR.playerAttack = (p, key) => {
+  if(p.weapon&&p.weapon.category!=='Sword')return SR.weaponAttack(p,key);
   const finisher = key === 'K' && p.combo === 'JJ' && p.comboWindow > 0;
   if (!SR.beginAttack(p, finisher ? 'finisher' : key === 'J' ? 'light' : 'heavy')) return false;
   if (finisher) {
@@ -46,6 +47,7 @@ SR.useSkill = (p, type) => {
 };
 
 SR.updatePlayer = (p, input, dt) => {
+  if(SR.updateWeapon)SR.updateWeapon(p,dt,input);
   // Timers belong to simulation time; pause freezes everything, including regen.
   for (const key of ['dashCooldown', 'guardBroken', 'regenDelay', 'comboWindow', 'comboFlash', 'noticeTime']) {
     p[key] = Math.max(0, p[key] - dt);

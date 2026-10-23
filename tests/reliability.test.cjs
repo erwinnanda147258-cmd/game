@@ -1,5 +1,5 @@
 const {test}=require('node:test'),assert=require('node:assert/strict');
-for(const f of ['input','player','enemies','combat','stages','progression','save'])require('../js/'+f+'.js');
+for(const f of ['input','player','enemies','combat','weapons','shop','stages','progression','save'])require('../js/'+f+'.js');
 const S=globalThis.SR;
 test('collision resolves fully at both arena walls in either argument order',()=>{
  for(const right of [false,true])for(const reverse of [false,true]){

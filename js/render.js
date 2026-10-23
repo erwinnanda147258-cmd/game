@@ -27,7 +27,7 @@ SR.Renderer = class {
       }
     }
     if(enemy&&a.hp>0){c.fillStyle='#08060c';c.fillRect(-30,-a.h-38,60,4);c.fillStyle=a.boss?'#ff6a89':'#b46988';c.fillRect(-30,-a.h-38,60*a.hp/a.maxHp,4);}
-    if(a.boss){c.strokeStyle='#ff8499';c.lineWidth=3;c.beginPath();c.moveTo(-15,-a.h);c.lineTo(-22,-a.h-23);c.lineTo(0,-a.h-12);c.lineTo(22,-a.h-23);c.lineTo(15,-a.h);c.stroke();}
+    if(a.boss){c.strokeStyle=['#ffb381','#9dbeff','#dfa6ff'][a.bossRegion];c.save();c.globalAlpha=.4;c.lineWidth=2;for(let ring=0;ring<a.phase;ring++){c.beginPath();c.ellipse(0,-a.h/2,42+ring*8,66+ring*7,Math.sin(t)*.1,0,Math.PI*2);c.stroke();}c.restore();c.lineWidth=3;c.beginPath();c.moveTo(-15,-a.h);c.lineTo(-22,-a.h-23);c.lineTo(0,-a.h-12);c.lineTo(22,-a.h-23);c.lineTo(15,-a.h);c.stroke();}
     c.scale(a.face,1);
     if(a.guarding){c.strokeStyle='#f3c8ac';c.lineWidth=5;c.strokeRect(18,-85,12,70);}
     if(a.kind==='archer'){c.strokeStyle=color;c.lineWidth=3;c.beginPath();c.ellipse(22,-62,19,36,0,-1.3,1.3);c.stroke();}
@@ -49,11 +49,18 @@ SR.Renderer = class {
     c.fillStyle=color;c.shadowColor=color;c.shadowBlur=10;c.fillRect(5,-a.h+14,10,3);c.shadowBlur=0;
     c.fillStyle=enemy?'#8f334e':'#7951a1';c.fillRect(-15,-48,32,5);
     const atk=a.attack,active=atk&&atk.time>=atk.windup&&atk.time<atk.windup+atk.active;
+    if(!enemy&&a.weapon?.category==='Gun'){
+      c.fillStyle='#3d354e';c.fillRect(8,-71,40,11);c.fillStyle=a.weapon.color;c.fillRect(37,-70,15,5);c.fillStyle='#171223';c.fillRect(16,-61,10,15);
+    }else if(!enemy&&a.weapon?.category==='Magic'){
+      c.strokeStyle=a.weapon.color;c.lineWidth=3;c.beginPath();c.moveTo(22,-12);c.lineTo(22,-103);c.stroke();c.beginPath();c.arc(22,-111,11+Math.sin(t*3)*2,0,Math.PI*2);c.stroke();
+    }else{
     c.save();c.translate(8,-64);c.rotate(active?-.8:atk?-1.9:.55);c.strokeStyle='#14111f';c.lineWidth=10;c.beginPath();c.moveTo(0,0);c.lineTo(28,12);c.stroke();c.strokeStyle='#8b729a';c.lineWidth=5;c.beginPath();c.moveTo(28,25);c.lineTo(28,-35);c.stroke();c.strokeStyle=color;c.lineWidth=2;c.beginPath();c.moveTo(31,12);c.lineTo(31,-43);c.stroke();c.restore();
+    }
+
     if(atk?.projectile&&atk.time<atk.windup){c.save();c.strokeStyle=enemy?'#ffb88399':'#c4b0ff88';c.setLineDash([8,8]);c.lineWidth=2;c.beginPath();c.moveTo(25,-65);c.lineTo(atk.range,-65+Math.sin(atk.projectile.angle||0)*atk.range);c.stroke();c.restore();}
     if(atk){
       if(atk.time<atk.windup){c.strokeStyle=enemy?'#ff496d':'#caa0ff';c.globalAlpha=.4+.5*atk.time/atk.windup;c.lineWidth=3;c.beginPath();c.ellipse(atk.radial?0:atk.range/2,-3,atk.radial?atk.range:atk.range/2,8,0,0,Math.PI*2);c.stroke();c.globalAlpha=1;if(enemy){c.fillStyle='#ff8296';c.font='bold 26px Arial';c.textAlign='center';c.fillText(atk.guardBreak?'BREAK':'!',0,-a.h-18);}}
-      if(active){c.strokeStyle=color;c.shadowColor=color;c.shadowBlur=18;c.lineWidth=['heavy','finisher','eclipse'].includes(atk.type)?13:7;c.beginPath();c.ellipse(atk.radial?0:12,-58,atk.radial?atk.range:atk.range-12,atk.radial?100:62,0,atk.radial?0:-1.3,atk.radial?Math.PI*2:1.2);c.stroke();c.shadowBlur=0;}
+      if(active&&!atk.projectile&&!atk.area){c.strokeStyle=color;c.shadowColor=color;c.shadowBlur=18;c.lineWidth=['heavy','finisher','eclipse'].includes(atk.type)?13:7;c.beginPath();c.ellipse(atk.radial?0:12,-58,atk.radial?atk.range:atk.range-12,atk.radial?100:62,0,atk.radial?0:-1.3,atk.radial?Math.PI*2:1.2);c.stroke();c.shadowBlur=0;}
     }
     c.restore();
   }

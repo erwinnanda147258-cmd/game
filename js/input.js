@@ -3,7 +3,7 @@ globalThis.SR = globalThis.SR || {};
 SR.Input = class {
   constructor(target = window) {
     this.held = new Set(); this.pressed = new Set();
-    const keys = new Set(['KeyA','KeyD','KeyW','KeyJ','KeyK','KeyL','KeyU','KeyI','KeyO','Escape','Space']);
+    const keys = new Set(['KeyA','KeyD','KeyW','KeyJ','KeyK','KeyL','KeyU','KeyI','KeyO','KeyR','Escape','Space']);
     target.addEventListener('keydown', e => {
       if (!keys.has(e.code) || (e.code !== 'Escape' && /INPUT|TEXTAREA|SELECT/.test(e.target?.tagName))) return;
       if(e.code === 'Space' && e.target?.tagName === 'BUTTON') return;

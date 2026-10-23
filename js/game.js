@@ -20,7 +20,8 @@ SR.Game = class {
   newGame(){const settings={...this.progress.settings};this.progress=SR.freshProgress();this.progress.settings=settings;this.audio.settings=this.progress.settings;this.save.write(this.progress);this.start(0);}
   showMenu(){this.state='menu';this.input.clear();this.player.buffer=null;this.ui.screen(this.state);}
   openSettings(){this.panelReturn=this.state==='paused'?'paused':'menu';this.input.clear();this.ui.screen('settings');}
-  back(){if(this.state==='settings'&&this.panelReturn==='paused'&&this.activeRun)this.ui.screen('paused');else this.showMenu();}
+  openArsenal(){this.panelReturn=this.state==='paused'?'paused':this.state==='victory'?'victory':'menu';this.input.clear();this.ui.screen('arsenal');}
+  back(){if(this.state==='arsenal'&&this.panelReturn==='victory'&&this.reward){this.ui.screen('victory');return;}if(['settings','arsenal'].includes(this.state)&&this.panelReturn==='paused'&&this.activeRun)this.ui.screen('paused');else this.showMenu();}
   pause(){if(this.state!=='playing')return;this.state='paused';this.input.clear();this.player.buffer=null;this.ui.screen(this.state);}
   resume(){if(!this.activeRun||this.settled)return false;this.state='playing';this.input.clear();this.ui.screen(this.state);this.canvas.focus();}
   hit(target,damage,face,event='hit'){

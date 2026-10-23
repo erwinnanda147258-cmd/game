@@ -11,7 +11,7 @@ const assert=require('node:assert/strict'),fs=require('node:fs');
   await page.click('#sound');assert.equal(await page.evaluate(()=>document.activeElement===game.canvas),true);
   assert.ok(Math.abs(await page.evaluate(()=>game.audio.master.gain.value)-.45)<.0001);
   await page.waitForTimeout(100);await page.keyboard.press('Escape');await page.waitForFunction(()=>game.state==='paused');
-  assert.equal(await page.evaluate(()=>game.audio.master.gain.value),0);
+  await page.waitForFunction(()=>game.audio.master.gain.value===0,{},{timeout:2000});assert.equal(await page.evaluate(()=>game.audio.master.gain.value),0);
   const before=await page.evaluate(()=>{window.originalPlayer=game.player;return {time:game.elapsed,hp:game.player.hp,enemy:game.enemy.hp,energy:game.player.energy};});
   await page.click('#settings');await page.locator('#volume').fill('17');await page.locator('#music').uncheck();await page.locator('#effects').selectOption('low');
   assert.equal(await page.evaluate(()=>game.audio.musicBus.gain.value),0);
@@ -21,7 +21,7 @@ const assert=require('node:assert/strict'),fs=require('node:fs');
   assert.equal(await page.evaluate(()=>game.elapsed),before.time);
   await page.click('#primary');await page.waitForFunction(()=>game.state==='playing');assert.equal(await page.evaluate(()=>game.player===window.originalPlayer),true);
   assert.ok(Math.abs(await page.evaluate(()=>game.audio.master.gain.value)-.17)<.0001);
-  await page.click('#sound');assert.equal(await page.evaluate(()=>game.audio.master.gain.value),0);await page.click('#sound');
+  await page.click('#sound');await page.waitForFunction(()=>game.audio.master.gain.value===0,{},{timeout:2000});assert.equal(await page.evaluate(()=>game.audio.master.gain.value),0);await page.click('#sound');
   // Brand navigation must not reload the document and discard the current battle.
   await page.click('.brand');assert.equal(await page.evaluate(()=>game.state),'menu');assert.equal(await page.evaluate(()=>game.player===window.originalPlayer),true);
   await page.click('#settings');

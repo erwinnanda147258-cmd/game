@@ -8,7 +8,7 @@ SR.Game = class {
     requestAnimationFrame(t=>this.frame(t));
   }
   reset(id){
-    this.stage=SR.stages[id];this.stageId=id;this.player=SR.makePlayer();SR.applyProgress(this.player,this.progress);
+    this.transition=2.4;this.transitionTitle=SR.stages[id].name;this.stage=SR.stages[id];this.stageId=id;this.player=SR.makePlayer();SR.applyProgress(this.player,this.progress);
     this.enemies=[];this.enemy=SR.makeEnemy();this.elapsed=0;this.camera=0;this.particles=[];this.numbers=[];this.hazards=[];
     this.shake=0;this.accumulator=0;this.activeRun=false;this.panelReturn='menu';this.wave=0;this.waveDelay=0;this.damageTaken=0;this.kills=0;this.reward=null;this.settled=false;this.input.clear();
   }
@@ -38,7 +38,7 @@ SR.Game = class {
   }
   step(dt){
     if(this.state!=='playing')return;
-    this.elapsed+=dt;this.audio.update(dt,true);SR.updatePlayer(this.player,this.input,dt);SR.tickActor(this.player,dt);
+    this.transition=Math.max(0,this.transition-dt);this.elapsed+=dt;this.audio.update(dt,true);SR.updatePlayer(this.player,this.input,dt);SR.tickActor(this.player,dt);
     for(const e of this.enemies){
       e.spawnGrace=Math.max(0,(e.spawnGrace||0)-dt);
       if(e.boss)SR.updateBoss(e,this.player,dt,this);else SR.updateEnemy(e,this.player,dt,this);
@@ -60,7 +60,7 @@ SR.Game = class {
     if(this.enemies.length===0){
       if(this.wave===this.stage.waves.length-1){this.finish(true);return;}
       this.waveDelay+=dt;
-      if(this.waveDelay>=1.8){this.wave++;this.waveDelay=0;this.hazards=[];this.player.hp=Math.min(this.player.maxHp,this.player.hp+20);this.player.energy=Math.min(this.player.maxEnergy,this.player.energy+25);this.enemies=SR.spawnWave(this.stage,this.wave,this.player);}
+      if(this.waveDelay>=1.8){this.wave++;this.waveDelay=0;if(this.stage.waves[this.wave].includes('boss')){this.transition=2.4;this.transitionTitle=this.stage.boss;}this.hazards=[];this.player.hp=Math.min(this.player.maxHp,this.player.hp+20);this.player.energy=Math.min(this.player.maxEnergy,this.player.energy+25);this.enemies=SR.spawnWave(this.stage,this.wave,this.player);}
     }
     for(const p of this.particles){p.life-=dt;p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=500*dt;}this.particles=this.particles.filter(p=>p.life>0);
     for(const n of this.numbers){n.life-=dt;n.y-=48*dt;}this.numbers=this.numbers.filter(n=>n.life>0);this.shake=Math.max(0,this.shake-dt*4);
